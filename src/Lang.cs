@@ -14,13 +14,15 @@ namespace Ambiance
     {
         static readonly string[] Langs = { "tr", "en", "es", "pt", "fr", "de", "ru", "zh", "ja", "ko", "it", "pl" };
 
-        // AMBIYANS_LANG=de gibi zorlanabilir (test ve ekran goruntusu icin)
-        static readonly int LangIdx = PickLang();
-        static readonly bool En = LangIdx != 0;   // Turkce disi
+        // Secilen dil: "" = Windows dili (otomatik), yoksa Langs'teki kod. Genel sayfasindan degistirilir, ayarlara kaydedilir.
+        static string langPref = "";
+        static int LangIdx = PickLang();
 
+        // Oncelik: AMBIYANS_LANG ortam degiskeni (test ve ekran goruntusu icin) > kullanicinin secimi > Windows dili
         static int PickLang()
         {
             string code = Environment.GetEnvironmentVariable("AMBIYANS_LANG");
+            if (string.IsNullOrEmpty(code)) code = langPref;
             if (string.IsNullOrEmpty(code)) code = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
             int i = Array.IndexOf(Langs, code.ToLowerInvariant());
             return i >= 0 ? i : 1;
@@ -392,6 +394,20 @@ namespace Ambiance
             new[] { "Ambiance Ultrawide'ı aç", "Open Ambiance Ultrawide", "Abrir Ambiance Ultrawide", "Abrir Ambiance Ultrawide", "Ouvrir Ambiance Ultrawide", "Ambiance Ultrawide öffnen", "Открыть Ambiance Ultrawide", "打开 Ambiance Ultrawide", "Ambiance Ultrawide を開く", "Ambiance Ultrawide 열기", "Apri Ambiance Ultrawide", "Otwórz Ambiance Ultrawide" },
             new[] { "Başlat / Durdur", "Start / Stop", "Iniciar / Detener", "Iniciar / Parar", "Démarrer / Arrêter", "Starten / Stoppen", "Запустить / Остановить", "开始 / 停止", "開始 / 停止", "시작 / 중지", "Avvia / Ferma", "Start / Stop" },
             new[] { "Çıkış", "Exit", "Salir", "Sair", "Quitter", "Beenden", "Выход", "退出", "終了", "종료", "Esci", "Zakończ" },
+            new[] { "Dil", "Language", "Idioma", "Idioma", "Langue", "Sprache", "Язык", "语言", "言語", "언어", "Lingua", "Język" },
+            new[] { "Arayüzün dili. Değişiklik hemen uygulanır.",
+                "Language of the interface. Changes apply right away.",
+                "Idioma de la interfaz. El cambio se aplica al instante.",
+                "Idioma da interface. A mudança é aplicada na hora.",
+                "Langue de l'interface. Le changement s'applique immédiatement.",
+                "Sprache der Oberfläche. Die Änderung gilt sofort.",
+                "Язык интерфейса. Изменение применяется сразу.",
+                "界面语言。更改会立即生效。",
+                "インターフェースの言語。変更はすぐに反映されます。",
+                "인터페이스 언어입니다. 변경 사항이 바로 적용됩니다.",
+                "Lingua dell'interfaccia. La modifica si applica subito.",
+                "Język interfejsu. Zmiana działa od razu." },
+            new[] { "Otomatik (Windows dili)", "Automatic (Windows language)", "Automático (idioma de Windows)", "Automático (idioma do Windows)", "Automatique (langue de Windows)", "Automatisch (Windows-Sprache)", "Автоматически (язык Windows)", "自动（Windows 语言）", "自動（Windows の言語）", "자동(Windows 언어)", "Automatica (lingua di Windows)", "Automatycznie (język Windows)" },
             new[] { "Ambiance Ultrawide arka planda çalışıyor", "Ambiance Ultrawide is still running", "Ambiance Ultrawide sigue en ejecución", "O Ambiance Ultrawide continua em execução", "Ambiance Ultrawide reste actif",
                 "Ambiance Ultrawide läuft weiter", "Ambiance Ultrawide продолжает работать", "Ambiance Ultrawide 仍在运行", "Ambiance Ultrawide は実行中です", "Ambiance Ultrawide가 계속 실행 중입니다", "Ambiance Ultrawide è ancora in esecuzione", "Ambiance Ultrawide nadal działa" },
             new[] { "Saatin yanındaki simgeden tekrar açabilir ya da Çıkış diyebilirsin.",

@@ -599,6 +599,23 @@
 
           <Border Style="{StaticResource Card}">
             <DockPanel>
+              <TextBlock Style="{StaticResource RowIcon}" Text="&#xE774;"/>
+              <Button x:Name="LangBtn" DockPanel.Dock="Right" Style="{StaticResource Secondary}" MinWidth="170">
+                <DockPanel>
+                  <TextBlock DockPanel.Dock="Right" Text="&#xE70D;" FontFamily="{StaticResource Icons}" FontSize="10"
+                             Margin="14,1,0,0" VerticalAlignment="Center" Foreground="{StaticResource TextDim}"/>
+                  <TextBlock x:Name="LangText" VerticalAlignment="Center"/>
+                </DockPanel>
+              </Button>
+              <StackPanel VerticalAlignment="Center">
+                <TextBlock Style="{StaticResource RowTitle}" Text="Dil"/>
+                <TextBlock Style="{StaticResource RowDesc}" Text="Arayüzün dili. Değişiklik hemen uygulanır."/>
+              </StackPanel>
+            </DockPanel>
+          </Border>
+
+          <Border Style="{StaticResource Card}">
+            <DockPanel>
               <TextBlock Style="{StaticResource RowIcon}" Text="&#xE7E8;"/>
               <CheckBox x:Name="AutostartToggle" DockPanel.Dock="Right" Style="{StaticResource Toggle}"/>
               <StackPanel VerticalAlignment="Center">

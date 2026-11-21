@@ -19,7 +19,7 @@ try {
     "/r:$wpf\PresentationFramework.dll" "/r:$wpf\PresentationCore.dll" "/r:$wpf\WindowsBase.dll" "/r:$fw\System.Xaml.dll" `
     /r:System.Windows.Forms.dll /r:System.Drawing.dll `
     "/r:$uni" "/r:$fnd" "/r:$stt" /nowarn:1701 "/r:$ref\System.Runtime.dll" "/r:$ref\System.Threading.Tasks.dll" `
-    App.cs GpuCapture.cs Ui.cs Lang.cs Startup.cs
+    App.cs GpuCapture.cs Ui.cs Lang.cs Startup.cs Menu.cs
   if ($LASTEXITCODE -ne 0) { throw "Derleme hatasi" }
   "OK: out\AmbianceUltrawide.exe"
 } finally { Pop-Location }

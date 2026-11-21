@@ -153,7 +153,6 @@ namespace Ambiance
         static IntPtr hwnd;
         static WriteableBitmap bmp;
         static WF.NotifyIcon tray;
-        static WF.ToolStripMenuItem toggleItem;
 
         static volatile bool active;
         static volatile bool running = true;
@@ -198,6 +197,8 @@ namespace Ambiance
             if (LaunchedByStartupTask()) trayMode = true;
 
             LoadSettings();
+            LangIdx = PickLang();   // kaydedilmis dil secimi
+            table = null;
             for (int i = 0; i < args.Length; i++)
             {
                 if (args[i] == "--buyutme") upscaleMode = true;
@@ -304,20 +305,8 @@ namespace Ambiance
             tray = new WF.NotifyIcon();
             tray.Icon = MakeIcon();
             tray.Text = "Ambiance Ultrawide (Ctrl+Alt+A)";
-            var menu = new WF.ContextMenuStrip();
-            var open = new WF.ToolStripMenuItem(L("Ambiance Ultrawide'ı aç"));
-            open.Font = new SD.Font(open.Font, SD.FontStyle.Bold);
-            open.Click += delegate { ShowSettings(); };
-            menu.Items.Add(open);
-            toggleItem = new WF.ToolStripMenuItem(L("Başlat / Durdur") + "   (Ctrl+Alt+A)");
-            toggleItem.Click += delegate { Toggle(); };
-            menu.Items.Add(toggleItem);
-            menu.Items.Add(new WF.ToolStripSeparator());
-            var exit = new WF.ToolStripMenuItem(L("Çıkış"));
-            exit.Click += delegate { Deactivate(); Application.Current.Shutdown(); };
-            menu.Items.Add(exit);
-
-            tray.ContextMenuStrip = menu;
+            // sag tik: uygulamanin temasina uygun menu (Menu.cs)
+            tray.MouseUp += delegate (object s, WF.MouseEventArgs e) { if (e.Button == WF.MouseButtons.Right) ShowTrayMenu(); };
             tray.DoubleClick += delegate { ShowSettings(); };
             tray.Visible = true;
         }
@@ -480,7 +469,6 @@ namespace Ambiance
             zoomOn = true;
             ApplyZoom(lastHole);
             active = true;
-            toggleItem.Checked = true;
             UiStatus();
         }
 
@@ -492,7 +480,6 @@ namespace Ambiance
             HideStrips();
             SetGameFrame(game, false);
             RestoreGameStyle();
-            if (toggleItem != null) toggleItem.Checked = false;
             UiStatus();
         }
 
@@ -555,6 +542,7 @@ namespace Ambiance
                     else if (kv[0] == "bildirim") notify = kv[1] == "1";
                     else if (kv[0] == "buyut") zoomPct = float.Parse(kv[1], System.Globalization.CultureInfo.InvariantCulture);
                     else if (kv[0] == "yumusak") zoomSmooth = kv[1] == "1";
+                    else if (kv[0] == "dil") langPref = Array.IndexOf(Langs, kv[1]) >= 0 ? kv[1] : "";
                     else if (kv[0] == "boyut")
                     {
                         string[] wh = kv[1].Split('x');
@@ -579,7 +567,8 @@ namespace Ambiance
                     "yumusak=" + (zoomSmooth ? "1" : "0"),
                     "fps=" + (1000 / FrameMs),
                     "tepki=" + Smooth.ToString(System.Globalization.CultureInfo.InvariantCulture),
-                    "bildirim=" + (notify ? "1" : "0") });
+                    "bildirim=" + (notify ? "1" : "0"),
+                    "dil=" + langPref });
             }
             catch { }
         }

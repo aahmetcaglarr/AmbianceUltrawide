@@ -35,6 +35,7 @@ namespace Ambiance
         static Window ui;
         static bool uiSync;                 // kod tarafindan deger atanirken olaylari yok say
         static bool hideTipShown;
+        static bool rebuildingUi;           // dil degisirken pencere yeniden kuruluyor
         static WriteableBitmap demoBmp;
         // ekran goruntusu cekerken listede sadece demo pencere gorunsun (kisisel pencere basliklari gorunmesin)
         static readonly string listFilter = Environment.GetEnvironmentVariable("AMBIYANS_LISTFILTER");
@@ -68,7 +69,7 @@ namespace Ambiance
             ui.SourceInitialized += delegate { ApplyMica(ui); };
             ui.Closing += delegate (object o, System.ComponentModel.CancelEventArgs e)
             {
-                if (!running) return;
+                if (!running || rebuildingUi) return;   // dil degisince eski pencere gercekten kapanir
                 e.Cancel = true;
                 ui.Hide();
                 if (!hideTipShown)
@@ -144,6 +145,9 @@ namespace Ambiance
             // genel
             Toggle("AutostartToggle", delegate (bool v) { SetAutostart(v); });
             Toggle("NotifyToggle", delegate (bool v) { notify = v; });
+            var lb = F<Button>("LangBtn");
+            F<TextBlock>("LangText").Text = LangLabel();
+            lb.Click += delegate { ShowLangMenu(lb); };
             F<Button>("ResetBtn").Click += delegate
             {
                 try { System.IO.File.Delete(SettingsPath()); } catch { }
