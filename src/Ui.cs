@@ -17,8 +17,8 @@ using System.Windows.Shapes;
 [assembly: System.Reflection.AssemblyTitle("Ambiance Ultrawide")]
 [assembly: System.Reflection.AssemblyProduct("Ambiance Ultrawide")]
 [assembly: System.Reflection.AssemblyDescription("Ultrawide ekranlar için keskin oyun görüntüsü ve ambiyans ışığı")]
-[assembly: System.Reflection.AssemblyVersion("1.0.0.0")]
-[assembly: System.Reflection.AssemblyFileVersion("1.0.0.0")]
+[assembly: System.Reflection.AssemblyVersion("1.1.0.0")]
+[assembly: System.Reflection.AssemblyFileVersion("1.1.0.0")]
 
 namespace Ambiance
 {
@@ -31,7 +31,7 @@ namespace Ambiance
 
     partial class App
     {
-        const string Version = "1.0";
+        const string Version = "1.1";
         static Window ui;
         static bool uiSync;                 // kod tarafindan deger atanirken olaylari yok say
         static bool hideTipShown;

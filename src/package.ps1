@@ -6,7 +6,7 @@ param(
   [string]$IdentityName = "CaglarSoft.AmbianceUltrawide",
   [string]$Publisher = "CN=B95AFB7E-19A6-4ED8-8F8A-760645B227E4",
   [string]$PublisherDisplayName = "CaglarSoft",
-  [string]$Version = "1.0.0.0"
+  [string]$Version = "1.1.0.0"
 )
 $ErrorActionPreference = 'Stop'
 $here = Split-Path $MyInvocation.MyCommand.Path
