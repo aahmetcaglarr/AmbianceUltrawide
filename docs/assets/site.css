@@ -1,0 +1,50 @@
+:root{--bg:#0d0b12;--bg2:#15121d;--card:#1b1725;--line:#2c2639;--text:#ece8f3;--muted:#a69fb4;--orange:#ff8a3d;--purple:#c04bff}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--text);font:17px/1.6 "Segoe UI Variable Text","Segoe UI",system-ui,-apple-system,"Noto Sans",sans-serif}
+:lang(zh) body,body:lang(zh-CN){font-family:"Microsoft YaHei UI","Microsoft YaHei","PingFang SC","Noto Sans SC",sans-serif}
+:lang(ja) body,body:lang(ja){font-family:"Yu Gothic UI","Yu Gothic","Hiragino Sans","Noto Sans JP",sans-serif}
+:lang(ko) body,body:lang(ko){font-family:"Malgun Gothic","Apple SD Gothic Neo","Noto Sans KR",sans-serif}
+a{color:var(--orange)}
+img{max-width:100%;height:auto;display:block}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+header.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 0}
+.brand{display:flex;align-items:center;gap:10px;color:var(--text);text-decoration:none;font-weight:600}
+.brand img{width:28px;height:28px}
+select{background:var(--card);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:6px 10px;font:inherit;font-size:15px}
+.hero{position:relative;text-align:center;padding:48px 0 24px;overflow:hidden}
+.hero:before{content:"";position:absolute;inset:-20% -10% auto;height:520px;background:radial-gradient(40% 60% at 22% 40%,rgba(255,138,61,.28),transparent 70%),radial-gradient(40% 60% at 78% 40%,rgba(192,75,255,.26),transparent 70%);z-index:-1}
+.hero .logo{width:88px;height:88px;margin:0 auto 16px}
+h1{font-size:clamp(34px,6vw,60px);line-height:1.1;margin:0 0 12px;letter-spacing:-.02em}
+.tag{font-size:clamp(19px,2.6vw,25px);margin:0 0 10px;color:#fff}
+.lead{max-width:720px;margin:0 auto 26px;color:var(--muted)}
+.cta{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:13px 22px;border-radius:12px;font-weight:600;text-decoration:none;font-size:17px}
+.btn.primary{background:linear-gradient(135deg,var(--orange),#ff6a5c 55%,var(--purple));color:#fff;box-shadow:0 8px 30px rgba(255,120,80,.25)}
+.btn.ghost{border:1px solid var(--line);color:var(--text);background:var(--card)}
+.btn svg{width:20px;height:20px;fill:currentColor}
+.facts{margin:16px 0 0;color:var(--muted);font-size:15px}
+.shot{margin:36px auto 0;border-radius:14px;overflow:hidden;border:1px solid var(--line);box-shadow:0 30px 80px rgba(0,0,0,.55)}
+section{padding:56px 0 8px}
+h2{font-size:clamp(24px,3.4vw,34px);line-height:1.2;margin:0 0 8px;text-align:center}
+.sub{color:var(--muted);text-align:center;margin:0 auto 24px;max-width:760px}
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.compare figure{margin:0;border-radius:12px;overflow:hidden;border:1px solid var(--line);background:var(--card)}
+.compare figcaption{padding:10px 14px;font-weight:600;display:flex;align-items:center;gap:8px}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+.compare img{image-rendering:pixelated}
+.ui{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start}
+.ui h3{font-size:21px;margin:0 0 4px}
+.ui p{color:var(--muted);margin:0 0 14px}
+.ui img{border-radius:12px;border:1px solid var(--line)}
+ul.feat{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
+ul.feat li{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px 16px 44px;position:relative}
+ul.feat li:before{content:"";position:absolute;left:18px;top:24px;width:10px;height:10px;border-radius:50%;background:linear-gradient(135deg,var(--orange),var(--purple))}
+.about{max-width:760px;margin:0 auto;color:#d6d0e0}
+.about p{margin:0 0 14px}
+footer{margin-top:64px;border-top:1px solid var(--line);padding:28px 0 40px;color:var(--muted);font-size:15px}
+footer nav{display:flex;flex-wrap:wrap;gap:6px 14px;margin-bottom:14px}
+footer nav a{color:var(--muted);text-decoration:none}
+footer nav a[aria-current]{color:var(--text);font-weight:600}
+footer .links{display:flex;flex-wrap:wrap;gap:6px 18px}
+@media (max-width:720px){body{font-size:16px}.compare,.ui{grid-template-columns:1fr}.hero{padding-top:28px}section{padding-top:40px}}

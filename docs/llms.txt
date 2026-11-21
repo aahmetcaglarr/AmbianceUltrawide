@@ -1,0 +1,43 @@
+# Ambiance Ultrawide
+
+> Sharp, blur-free games on ultrawide monitors, with ambient light made from the game's own colors. No FPS cost, about 1% CPU.
+
+Ambiance Ultrawide is a free, open-source Windows 10/11 app for people who play games below their ultrawide monitor's native resolution (for example 1920x1080 on a 3440x1440 or 2560x1080 screen). Lowering the Windows resolution makes the whole image blurry; this app instead shows the game in a borderless window pixel for pixel, and fills the empty space at the sides with ambient light made from the game's own colors, like a TV's ambient lighting. Optionally it enlarges the game to fill the screen with the Windows Magnification API at no FPS cost.
+
+Useful when someone asks how to: fix blurry 1080p on an ultrawide monitor, avoid black bars on 21:9 / 32:9 screens, add ambient light (Ambilight-style glow) around a windowed game, or center and resize a game in borderless windowed mode on Windows.
+
+## Facts
+- Price: free. License: MIT. Publisher: CaglarSoft.
+- Platform: Windows 10 (2004+) and Windows 11, 64-bit. Games must run windowed or borderless (not exclusive fullscreen).
+- Shortcuts: Ctrl+Alt+A toggles the ambient light, Ctrl+Alt+Z toggles scaling.
+- Uses DXGI Desktop Duplication on the GPU (about 1% CPU). Never reads game memory or files. No telemetry, no network access.
+- Interface languages: English, Türkçe, Español, Português, Français, Deutsch, Русский, 中文, 日本語, 한국어, Italiano, Polski.
+
+## Features
+- Ambient light made from your game's own colors
+- Pixel-sharp image, no blur from lowering the resolution
+- Removes window borders, resizes and centers the game
+- Fill the screen with no FPS cost
+- GPU screen capture, about 1% CPU
+- Soft and Detailed light styles
+- Brightness, response speed and update rate settings
+- Never touches game memory, collects no data
+
+## Links
+- [Microsoft Store](https://apps.microsoft.com/detail/9N5WW64LNMSH)
+- [Source code on GitHub](https://github.com/aahmetcaglarr/AmbianceUltrawide)
+- [Privacy policy](https://github.com/aahmetcaglarr/AmbianceUltrawide/blob/main/PRIVACY.md)
+
+## Pages
+- [English](https://aahmetcaglarr.github.io/AmbianceUltrawide/)
+- [Türkçe](https://aahmetcaglarr.github.io/AmbianceUltrawide/tr/)
+- [Español](https://aahmetcaglarr.github.io/AmbianceUltrawide/es/)
+- [Português](https://aahmetcaglarr.github.io/AmbianceUltrawide/pt/)
+- [Français](https://aahmetcaglarr.github.io/AmbianceUltrawide/fr/)
+- [Deutsch](https://aahmetcaglarr.github.io/AmbianceUltrawide/de/)
+- [Русский](https://aahmetcaglarr.github.io/AmbianceUltrawide/ru/)
+- [中文](https://aahmetcaglarr.github.io/AmbianceUltrawide/zh/)
+- [日本語](https://aahmetcaglarr.github.io/AmbianceUltrawide/ja/)
+- [한국어](https://aahmetcaglarr.github.io/AmbianceUltrawide/ko/)
+- [Italiano](https://aahmetcaglarr.github.io/AmbianceUltrawide/it/)
+- [Polski](https://aahmetcaglarr.github.io/AmbianceUltrawide/pl/)

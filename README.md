@@ -8,6 +8,11 @@ and fills the empty space around them with <b>ambient light</b> made from the ga
 <i><a href="#türkçe">Türkçe aşağıda</a></i>
 </p>
 
+<p align="center">
+<a href="https://apps.microsoft.com/detail/9N5WW64LNMSH?mode=direct"><img src="https://get.microsoft.com/images/en-us%20dark.svg" width="200" alt="Get it from Microsoft"></a>
+<br><a href="https://aahmetcaglarr.github.io/AmbianceUltrawide/">Website</a> · 12 languages · free and open source
+</p>
+
 <p align="center"><img src="docs/screenshots/store-1-en.png" width="760" alt="Ambiance Ultrawide ambient light around a game"></p>
 
 ---
@@ -33,7 +38,7 @@ If you want, it can also enlarge the image to fill the screen using Windows' own
 
 ## Install
 
-- **Microsoft Store:** search for "Ambiance Ultrawide" and click **Install** *(recommended — updates automatically)*.
+- **[Microsoft Store](https://apps.microsoft.com/detail/9N5WW64LNMSH):** click **Install** *(recommended — updates automatically)*.
 - **Manual:** download `AmbianceUltrawide-x.y.z-win-x64.zip` from [Releases](../../releases), unzip it and run `AmbianceUltrawide.exe`.
   Because the exe isn't code-signed yet, Windows may show an "unknown publisher" warning: click **More info → Run anyway**.
 
@@ -91,7 +96,7 @@ powershell -ExecutionPolicy Bypass -File src\package.ps1    # MSIX + zip
 - Görüntüyü ekran kartıyla yakalar, işlemci kullanımı yaklaşık %1.
 - Oyunun belleğine ya da dosyalarına dokunmaz.
 
-**Kurulum:** Microsoft Store'da "Ambiance Ultrawide" diye arat ya da [Releases](../../releases) sayfasından zip'i indir.
+**Kurulum:** [Microsoft Store](https://apps.microsoft.com/detail/9N5WW64LNMSH?hl=tr-tr)'dan yükle ([Türkçe tanıtım sayfası](https://aahmetcaglarr.github.io/AmbianceUltrawide/tr/)) ya da [Releases](../../releases) sayfasından zip'i indir.
 **Kullanım:** Oyunu pencereli ya da kenarlıksız modda aç, Ambiance Ultrawide'da listeden seç ve **Başlat**'a bas. Ya da oyundayken **Ctrl+Alt+A**'ya bas. **Ctrl+Alt+Z** büyütmeyi açıp kapatır.
 
 Ambiance Ultrawide hiçbir veri toplamaz ve internete bağlanmaz ([PRIVACY.md](PRIVACY.md)). [MIT](LICENSE) lisanslıdır.
