@@ -2,9 +2,10 @@
 # Partner Center > Urun > Product identity sayfasindaki uc degeri girin:
 #   powershell -ExecutionPolicy Bypass -File package.ps1 -IdentityName "12345Ad.AmbianceUltrawide" -Publisher "CN=XXXXXXXX-..." -PublisherDisplayName "Adiniz"
 param(
-  [string]$IdentityName = "AmbianceUltrawide.Test",
-  [string]$Publisher = "CN=Ambiance Test",
-  [string]$PublisherDisplayName = "Ambiance Ultrawide",
+  # Partner Center > Product identity (Microsoft Store kimligi)
+  [string]$IdentityName = "CaglarSoft.AmbianceUltrawide",
+  [string]$Publisher = "CN=B95AFB7E-19A6-4ED8-8F8A-760645B227E4",
+  [string]$PublisherDisplayName = "CaglarSoft",
   [string]$Version = "1.0.0.0"
 )
 $ErrorActionPreference = 'Stop'
