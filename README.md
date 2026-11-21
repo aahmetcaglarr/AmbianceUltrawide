@@ -3,8 +3,8 @@
 <h1 align="center">Ambiance Ultrawide</h1>
 
 <p align="center">
-Shows games <b>pixel-sharp</b> on ultrawide monitors — no blur —<br>
-and fills the empty space around them with <b>ambient light</b> made from the game's own colors.<br>
+<b>Ambient light synced to your game</b> for ultrawide monitors:<br>
+the black bars around a 16:9 game glow with the scene, like a TV's ambient lighting, and the game stays <b>pixel-sharp</b>.<br>
 <i><a href="#türkçe">Türkçe aşağıda</a></i>
 </p>
 
@@ -85,7 +85,7 @@ powershell -ExecutionPolicy Bypass -File src\package.ps1    # MSIX + zip
 <a id="türkçe"></a>
 ## Türkçe
 
-**Ambiance Ultrawide**, ultrawide monitörlerde düşük çözünürlükte oynanan oyunları Windows çözünürlüğünü düşürmenin yarattığı bulanıklık olmadan, **piksel piksel keskin** gösterir. Oyunun etrafındaki boşluğu da televizyonlardaki gibi oyunun kendi renklerinden oluşan **ambiyans ışığıyla** doldurur.
+**Ambiance Ultrawide**, ultrawide monitörün için **oyundaki sahneyle senkron ambiyans ışığı**. Oyunun etrafındaki siyah boşlukları, televizyonlardaki gibi sahneyle birlikte değişen yumuşak bir ışıkla doldurur. Oyun da Windows çözünürlüğünü düşürmenin yarattığı bulanıklık olmadan **piksel piksel keskin** kalır.
 
 <p align="center"><img src="docs/screenshots/home-tr.png" width="760" alt="Ambiance Ultrawide ana ekran"></p>
 

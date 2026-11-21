@@ -36,20 +36,6 @@ META = {
     "it": ("it", "it-it", "Italiano"),
     "pl": ("pl", "pl-pl", "Polski"),
 }
-TAG = {
-    "en": "Sharp games. Ambient light. Made for ultrawide.",
-    "tr": "Keskin oyunlar. Ambiyans ışığı. Ultrawide için.",
-    "es": "Juegos nítidos. Luz ambiental. Hecho para ultrapanorámicos.",
-    "pt": "Jogos nítidos. Luz ambiente. Feito para ultrawide.",
-    "fr": "Jeux nets. Éclairage d'ambiance. Conçu pour l'ultra-large.",
-    "de": "Scharfe Spiele. Ambientelicht. Gemacht für Ultrawide.",
-    "ru": "Чёткие игры. Фоновая подсветка. Для ультрашироких мониторов.",
-    "zh": "清晰的游戏，氛围的灯光，为超宽屏而生。",
-    "ja": "くっきりゲーム。アンビエントライト。ウルトラワイドのために。",
-    "ko": "선명한 게임. 앰비언트 라이트. 울트라와이드를 위해.",
-    "it": "Giochi nitidi. Luce ambientale. Pensato per l'ultrawide.",
-    "pl": "Ostre gry. Podświetlenie. Stworzone dla ultrawide.",
-}
 # features, about, get, source, privacy, facts
 UI = {
     "en": ("Features", "About", "Get it from Microsoft", "Source code", "Privacy", "Free · Open source · Windows 10/11 · 12 languages"),
@@ -195,7 +181,7 @@ def render(lang, L, sizes):
     feats_h, about_h, get, source, privacy, facts = UI[lang]
     cap = L["captions"]
     prefix = "" if lang == "en" else "../"
-    title = f"Ambiance Ultrawide – {TAG[lang]}"
+    title = f"Ambiance Ultrawide – {L['tagline']}"
     alternates = "\n".join(f'<link rel="alternate" hreflang="{META[x][0]}" href="{page_url(x)}">' for x in LANGS)
     ld = {
         "@context": "https://schema.org",
@@ -259,7 +245,7 @@ def render(lang, L, sizes):
 <div class="hero">
 <img class="logo" src="{prefix}assets/logo.png" width="88" height="88" alt="Ambiance Ultrawide">
 <h1>Ambiance Ultrawide</h1>
-<p class="tag">{e(TAG[lang])}</p>
+<p class="tag">{e(L['tagline'])}</p>
 <p class="lead">{e(L['short'])}</p>
 <div class="cta">
 <a class="btn primary" href="{store_url(lang)}">{DOWNLOAD_SVG}{e(get)}</a>
@@ -345,7 +331,7 @@ def llms(data):
 
 > {L['short']}
 
-Ambiance Ultrawide is a free, open-source Windows 10/11 app for people who play games below their ultrawide monitor's native resolution (for example 1920x1080 on a 3440x1440 or 2560x1080 screen). Lowering the Windows resolution makes the whole image blurry; this app instead shows the game in a borderless window pixel for pixel, and fills the empty space at the sides with ambient light made from the game's own colors, like a TV's ambient lighting. Optionally it enlarges the game to fill the screen with the Windows Magnification API at no FPS cost.
+Ambiance Ultrawide is a free, open-source Windows 10/11 app that adds ambient light to ultrawide monitors. When a 16:9 game runs on a 21:9 or 32:9 screen, it fills the black bars at the sides with a soft glow synced to the scene in the game, like a TV's ambient lighting. It also keeps the game pixel-sharp: instead of lowering the Windows resolution (which blurs everything), it shows the game in a borderless window pixel for pixel. Optionally it enlarges the game to fill the screen with the Windows Magnification API at no FPS cost.
 
 Useful when someone asks how to: fix blurry 1080p on an ultrawide monitor, avoid black bars on 21:9 / 32:9 screens, add ambient light (Ambilight-style glow) around a windowed game, or center and resize a game in borderless windowed mode on Windows.
 

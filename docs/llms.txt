@@ -1,8 +1,8 @@
 # Ambiance Ultrawide
 
-> Sharp, blur-free games on ultrawide monitors, with ambient light made from the game's own colors. No FPS cost, about 1% CPU.
+> Ambient light synced to your game, for ultrawide monitors. It fills the black bars around your game with a soft glow, like a TV's ambient lighting. The game stays pixel-sharp, with no FPS cost.
 
-Ambiance Ultrawide is a free, open-source Windows 10/11 app for people who play games below their ultrawide monitor's native resolution (for example 1920x1080 on a 3440x1440 or 2560x1080 screen). Lowering the Windows resolution makes the whole image blurry; this app instead shows the game in a borderless window pixel for pixel, and fills the empty space at the sides with ambient light made from the game's own colors, like a TV's ambient lighting. Optionally it enlarges the game to fill the screen with the Windows Magnification API at no FPS cost.
+Ambiance Ultrawide is a free, open-source Windows 10/11 app that adds ambient light to ultrawide monitors. When a 16:9 game runs on a 21:9 or 32:9 screen, it fills the black bars at the sides with a soft glow synced to the scene in the game, like a TV's ambient lighting. It also keeps the game pixel-sharp: instead of lowering the Windows resolution (which blurs everything), it shows the game in a borderless window pixel for pixel. Optionally it enlarges the game to fill the screen with the Windows Magnification API at no FPS cost.
 
 Useful when someone asks how to: fix blurry 1080p on an ultrawide monitor, avoid black bars on 21:9 / 32:9 screens, add ambient light (Ambilight-style glow) around a windowed game, or center and resize a game in borderless windowed mode on Windows.
 
@@ -14,7 +14,7 @@ Useful when someone asks how to: fix blurry 1080p on an ultrawide monitor, avoid
 - Interface languages: English, Türkçe, Español, Português, Français, Deutsch, Русский, 中文, 日本語, 한국어, Italiano, Polski.
 
 ## Features
-- Ambient light made from your game's own colors
+- Ambient light synced to the scene in your game
 - Pixel-sharp image, no blur from lowering the resolution
 - Removes window borders, resizes and centers the game
 - Fill the screen with no FPS cost

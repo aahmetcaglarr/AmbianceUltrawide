@@ -26,20 +26,6 @@ logo = Image.open(os.path.join(ROOT, "src", "logo.png")).convert("RGBA")
 BG = ms.background()
 FT, FS = ms.fonts(lang, 60, 32)
 FBIG, _ = ms.fonts("en", 104, 30)
-TAG = {
-    "en": "Sharp games. Ambient light. Made for ultrawide.",
-    "tr": "Keskin oyunlar. Ambiyans ışığı. Ultrawide için.",
-    "es": "Juegos nítidos. Luz ambiental. Hecho para ultrapanorámicos.",
-    "pt": "Jogos nítidos. Luz ambiente. Feito para ultrawide.",
-    "fr": "Jeux nets. Éclairage d'ambiance. Conçu pour l'ultra-large.",
-    "de": "Scharfe Spiele. Ambientelicht. Gemacht für Ultrawide.",
-    "ru": "Чёткие игры. Фоновая подсветка. Для ультрашироких мониторов.",
-    "zh": "清晰的游戏，氛围的灯光，为超宽屏而生。",
-    "ja": "くっきりゲーム。アンビエントライト。ウルトラワイドのために。",
-    "ko": "선명한 게임. 앰비언트 라이트. 울트라와이드를 위해.",
-    "it": "Giochi nitidi. Luce ambientale. Pensato per l'ultrawide.",
-    "pl": "Ostre gry. Podświetlenie. Stworzone dla ultrawide.",
-}
 OUTRO = {
     "en": ("Free on the Microsoft Store", "12 languages  ·  About 1% CPU  ·  Open source"),
     "tr": ("Microsoft Store'da ücretsiz", "12 dil  ·  Yaklaşık %1 işlemci  ·  Açık kaynak"),
@@ -104,7 +90,7 @@ def scene_intro(t, dur):
     lg.putalpha(lg.getchannel("A").point(lambda v: int(v * a)))
     img.alpha_composite(lg, ((W - lg.width) // 2, 250 - (lg.height - 230) // 2))
     return layer_text(img, [(530, "Ambiance Ultrawide", FBIG, (255, 255, 255), ease((t - 0.5) / 1.0)),
-                            (680, TAG.get(lang, TAG["en"]), FS, (215, 208, 225), ease((t - 1.3) / 1.0))])
+                            (680, data["tagline"], FS, (215, 208, 225), ease((t - 1.3) / 1.0))])
 
 
 def make_still(path, z0=1.0, z1=1.06):
