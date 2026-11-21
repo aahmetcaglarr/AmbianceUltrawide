@@ -1,0 +1,22 @@
+AMBIYANS
+========
+
+Ultrawide monitörlerde oyunları bulanıklaştırmadan gösterir ve kenarları
+oyunun renkleriyle aydınlatır. Ücretsiz ve açık kaynak (MIT lisansı).
+
+KULLANIM
+1. Ambiyans.exe'yi çalıştır. (Kurulum gerekmez.)
+   Windows "bilinmeyen yayıncı" uyarısı verirse: Ek bilgi -> Yine de çalıştır.
+2. Oyunu pencereli ya da kenarlıksız (borderless) modda aç.
+3. Ambiyans penceresinde oyunu listeden seç ve Başlat'a bas.
+   Ya da oyundayken Ctrl+Alt+A'ya bas.
+
+KISAYOLLAR
+  Ctrl+Alt+A   Ambiyansı aç / kapat
+  Ctrl+Alt+Z   Büyütmeyi aç / kapat
+
+Pencereyi kapatınca program saatin yanında çalışmaya devam eder.
+Tamamen kapatmak için oradaki simgeye sağ tıklayıp Çıkış de.
+
+Ambiyans hiçbir veri toplamaz ve internete bağlanmaz.
+Gereksinim: Windows 10 (2004+) veya Windows 11, 64 bit.
