@@ -6,11 +6,11 @@ using System.Text;
 using Windows.ApplicationModel;
 using Windows.Foundation;
 
-namespace Ambiyans
+namespace Ambiance
 {
     partial class App
     {
-        const string StartupTaskId = "AmbiyansStartup";
+        const string StartupTaskId = "AmbianceUltrawideStartup";
 
         [DllImport("kernel32.dll", CharSet = CharSet.Unicode)]
         static extern int GetCurrentPackageFullName(ref int length, StringBuilder name);

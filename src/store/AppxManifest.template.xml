@@ -10,7 +10,7 @@
   <Identity Name="{IDENTITY_NAME}" Publisher="{PUBLISHER}" Version="{VERSION}" ProcessorArchitecture="x64" />
 
   <Properties>
-    <DisplayName>Ambiyans</DisplayName>
+    <DisplayName>Ambiance Ultrawide</DisplayName>
     <PublisherDisplayName>{PUBLISHER_DISPLAY_NAME}</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
@@ -35,9 +35,9 @@
   </Resources>
 
   <Applications>
-    <Application Id="Ambiyans" Executable="Ambiyans.exe" EntryPoint="Windows.FullTrustApplication">
+    <Application Id="AmbianceUltrawide" Executable="AmbianceUltrawide.exe" EntryPoint="Windows.FullTrustApplication">
       <uap:VisualElements
-        DisplayName="Ambiyans"
+        DisplayName="Ambiance Ultrawide"
         Description="Sharp games and ambient light for ultrawide monitors"
         BackgroundColor="transparent"
         Square150x150Logo="Assets\Square150x150Logo.png"
@@ -45,8 +45,8 @@
         <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png" />
       </uap:VisualElements>
       <Extensions>
-        <desktop:Extension Category="windows.startupTask" Executable="Ambiyans.exe" EntryPoint="Windows.FullTrustApplication">
-          <desktop:StartupTask TaskId="AmbiyansStartup" Enabled="false" DisplayName="Ambiyans" />
+        <desktop:Extension Category="windows.startupTask" Executable="AmbianceUltrawide.exe" EntryPoint="Windows.FullTrustApplication">
+          <desktop:StartupTask TaskId="AmbianceUltrawideStartup" Enabled="false" DisplayName="Ambiance Ultrawide" />
         </desktop:Extension>
       </Extensions>
     </Application>

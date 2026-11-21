@@ -1,27 +1,27 @@
 # Microsoft Store sayfası metinleri
 
-Partner Center > Ambiyans > **Store listings** bölümünde her dil için ilgili alana kopyala.
+Partner Center > Ambiance Ultrawide > **Store listings** bölümünde her dil için ilgili alana kopyala.
 Ekran görüntüleri: `docs/screenshots/store-*.png` (1920×1080).
 
 ---
 
 ## Türkçe (tr-tr)
 
-**Ürün adı:** Ambiyans
+**Ürün adı:** Ambiance Ultrawide
 
 **Kısa açıklama** *(oyun ve uygulama aramalarında görünür)*
 Ultrawide monitörlerde oyunlar bulanık değil, keskin. Boşluk da oyunun renkleriyle aydınlanır.
 
 **Açıklama**
-Ultrawide monitörde oyunu daha düşük çözünürlükte oynamak için Windows çözünürlüğünü düşürünce görüntü bulanıklaşır. Ambiyans bu sorunu çözer.
+Ultrawide monitörde oyunu daha düşük çözünürlükte oynamak için Windows çözünürlüğünü düşürünce görüntü bulanıklaşır. Ambiance Ultrawide bu sorunu çözer.
 
 Oyunu pencerede, piksel piksel birebir ve bulanıklaşmadan gösterir. Kenarlarda kalan boşluğu da televizyonlardaki ambiyans ışığı gibi oyunun kendi renkleriyle doldurur. Siyah bantlar yerine oyunun atmosferini taşıyan yumuşak bir ışık görürsün.
 
 İstersen görüntüyü Windows'un kendi büyütme sistemiyle ekranı dolduracak kadar büyütebilirsin. Oyun yine aynı sayıda piksel çizer, bu yüzden FPS'in düşmez.
 
-Ambiyans çok hafiftir. Görüntüyü ekran kartıyla yakalar ve işlemcini neredeyse hiç kullanmaz. Oyunların belleğine ya da dosyalarına dokunmaz, sadece ekranda görünen görüntüyü okur. Veri toplamaz ve internete bağlanmaz.
+Ambiance Ultrawide çok hafiftir. Görüntüyü ekran kartıyla yakalar ve işlemcini neredeyse hiç kullanmaz. Oyunların belleğine ya da dosyalarına dokunmaz, sadece ekranda görünen görüntüyü okur. Veri toplamaz ve internete bağlanmaz.
 
-Kullanımı: Oyunu pencereli ya da kenarlıksız (borderless) modda aç, Ambiyans'ta listeden seç ve Başlat'a bas. Ya da oyundayken Ctrl+Alt+A'ya bas.
+Kullanımı: Oyunu pencereli ya da kenarlıksız (borderless) modda aç, Ambiance Ultrawide'da listeden seç ve Başlat'a bas. Ya da oyundayken Ctrl+Alt+A'ya bas.
 
 Ücretsiz ve açık kaynaktır.
 
@@ -47,21 +47,21 @@ ultrawide, ambilight, ambiyans ışığı, oyun, çözünürlük, 21:9, bulanık
 
 ## English (en-us)
 
-**Product name:** Ambiyans
+**Product name:** Ambiance Ultrawide
 
 **Short description**
 Sharp, blur-free games on ultrawide monitors, with ambient light made from the game's own colors.
 
 **Description**
-Lowering the Windows resolution to play a game at a lower resolution on an ultrawide monitor makes everything blurry. Ambiyans fixes that.
+Lowering the Windows resolution to play a game at a lower resolution on an ultrawide monitor makes everything blurry. Ambiance Ultrawide fixes that.
 
 It shows your game in a window, pixel-for-pixel and without blur, and fills the empty space at the sides with ambient light made from the game's own colors, like a TV's ambient lighting. Instead of black bars, you get a soft glow that carries the atmosphere of the game.
 
-If you want, Ambiyans can enlarge the image to fill the screen using Windows' own magnifier. The game still renders the same number of pixels, so you lose no FPS.
+If you want, Ambiance Ultrawide can enlarge the image to fill the screen using Windows' own magnifier. The game still renders the same number of pixels, so you lose no FPS.
 
-Ambiyans is very lightweight. It captures the screen on the graphics card and barely uses your CPU. It never touches the memory or files of your games; it only reads what is shown on screen. It collects no data and makes no network connections.
+Ambiance Ultrawide is very lightweight. It captures the screen on the graphics card and barely uses your CPU. It never touches the memory or files of your games; it only reads what is shown on screen. It collects no data and makes no network connections.
 
-How to use: run your game in windowed or borderless mode, pick it in Ambiyans and press Start. Or press Ctrl+Alt+A while in game.
+How to use: run your game in windowed or borderless mode, pick it in Ambiance Ultrawide and press Start. Or press Ctrl+Alt+A while in game.
 
 Free and open source.
 
@@ -95,6 +95,6 @@ First release.
 | Web sitesi | GitHub proje sayfası |
 | Destek iletişim | GitHub "Issues" sayfası |
 | Sistem gereksinimi | Windows 10 2004+ / Windows 11, x64 |
-| runFullTrust gerekçesi | "Ambiyans is a Win32 desktop app (WPF/.NET Framework). It needs full trust to capture the screen with DXGI Desktop Duplication, use the Windows Magnification API, register global hotkeys and move/resize the user-selected game window." |
+| runFullTrust gerekçesi | "Ambiance Ultrawide is a Win32 desktop app (WPF/.NET Framework). It needs full trust to capture the screen with DXGI Desktop Duplication, use the Windows Magnification API, register global hotkeys and move/resize the user-selected game window." |
 
 **Yaş derecelendirmesi (IARC anketi):** Uygulama türü "Utility / productivity" seç. Şiddet, cinsellik, kumar, kullanıcılar arası iletişim, konum paylaşımı ya da satın alma **yok**. Sonuç "3+ / Herkes" olmalı.

@@ -8,7 +8,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace Ambiyans
+namespace Ambiance
 {
     partial class App
     {
@@ -67,7 +67,7 @@ namespace Ambiyans
                 "아래에서 게임을 선택하거나 게임 중에 {KA}를 누르세요.",
                 "Scegli il gioco qui sotto o premi {KA} durante la partita.",
                 "Wybierz grę poniżej lub naciśnij {KA} w grze." },
-            new[] { "Ambiyans açık. Durdurmak için {KA}'ya bas ya da aşağıdaki butonu kullan.",
+            new[] { "Ambiyans ışığı açık. Durdurmak için {KA}'ya bas ya da aşağıdaki butonu kullan.",
                 "Ambient light is on. Press {KA} or use the button below to stop.",
                 "La luz ambiental está activa. Pulsa {KA} o usa el botón de abajo para detenerla.",
                 "A luz ambiente está ativa. Pressione {KA} ou use o botão abaixo para parar.",
@@ -295,7 +295,7 @@ namespace Ambiyans
                 "Mostra avvisi e suggerimenti come notifiche di Windows.",
                 "Pokazuj ostrzeżenia i wskazówki jako powiadomienia Windows." },
             new[] { "Kısayollar", "Shortcuts", "Atajos", "Atalhos", "Raccourcis", "Tastenkürzel", "Сочетания клавиш", "快捷键", "ショートカット", "단축키", "Scorciatoie", "Skróty" },
-            new[] { "Ambiyansı aç / kapat (o an aktif pencerede)",
+            new[] { "Ambiyans ışığını aç / kapat (o an aktif pencerede)",
                 "Turn ambient light on / off (on the active window)",
                 "Activar / desactivar la luz ambiental (en la ventana activa)",
                 "Ligar / desligar a luz ambiente (na janela ativa)",
@@ -389,11 +389,11 @@ namespace Ambiyans
                 "Gra musi działać w trybie okna lub okna bez ramki. Tryb pełnoekranowy na wyłączność nie jest obsługiwany." },
 
             // tepsi ve bildirimler
-            new[] { "Ambiyans'ı aç", "Open Ambiyans", "Abrir Ambiyans", "Abrir Ambiyans", "Ouvrir Ambiyans", "Ambiyans öffnen", "Открыть Ambiyans", "打开 Ambiyans", "Ambiyans を開く", "Ambiyans 열기", "Apri Ambiyans", "Otwórz Ambiyans" },
+            new[] { "Ambiance Ultrawide'ı aç", "Open Ambiance Ultrawide", "Abrir Ambiance Ultrawide", "Abrir Ambiance Ultrawide", "Ouvrir Ambiance Ultrawide", "Ambiance Ultrawide öffnen", "Открыть Ambiance Ultrawide", "打开 Ambiance Ultrawide", "Ambiance Ultrawide を開く", "Ambiance Ultrawide 열기", "Apri Ambiance Ultrawide", "Otwórz Ambiance Ultrawide" },
             new[] { "Başlat / Durdur", "Start / Stop", "Iniciar / Detener", "Iniciar / Parar", "Démarrer / Arrêter", "Starten / Stoppen", "Запустить / Остановить", "开始 / 停止", "開始 / 停止", "시작 / 중지", "Avvia / Ferma", "Start / Stop" },
             new[] { "Çıkış", "Exit", "Salir", "Sair", "Quitter", "Beenden", "Выход", "退出", "終了", "종료", "Esci", "Zakończ" },
-            new[] { "Ambiyans arka planda çalışıyor", "Ambiyans is still running", "Ambiyans sigue en ejecución", "O Ambiyans continua em execução", "Ambiyans reste actif",
-                "Ambiyans läuft weiter", "Ambiyans продолжает работать", "Ambiyans 仍在运行", "Ambiyans は実行中です", "Ambiyans가 계속 실행 중입니다", "Ambiyans è ancora in esecuzione", "Ambiyans nadal działa" },
+            new[] { "Ambiance Ultrawide arka planda çalışıyor", "Ambiance Ultrawide is still running", "Ambiance Ultrawide sigue en ejecución", "O Ambiance Ultrawide continua em execução", "Ambiance Ultrawide reste actif",
+                "Ambiance Ultrawide läuft weiter", "Ambiance Ultrawide продолжает работать", "Ambiance Ultrawide 仍在运行", "Ambiance Ultrawide は実行中です", "Ambiance Ultrawide가 계속 실행 중입니다", "Ambiance Ultrawide è ancora in esecuzione", "Ambiance Ultrawide nadal działa" },
             new[] { "Saatin yanındaki simgeden tekrar açabilir ya da Çıkış diyebilirsin.",
                 "Open it again from the tray icon, or choose Exit there.",
                 "Ábrelo de nuevo desde el icono de la bandeja o elige Salir allí.",
@@ -408,18 +408,18 @@ namespace Ambiyans
                 "Otwórz go ponownie z ikony w zasobniku lub wybierz tam Zakończ." },
             new[] { "Kısayol kullanılamıyor", "Shortcut unavailable", "Atajo no disponible", "Atalho indisponível", "Raccourci indisponible", "Tastenkürzel nicht verfügbar",
                 "Сочетание клавиш недоступно", "快捷键不可用", "ショートカットを使用できません", "단축키를 사용할 수 없음", "Scorciatoia non disponibile", "Skrót niedostępny" },
-            new[] { "Ctrl+Alt+A başka bir program tarafından kullanılıyor. Ambiyansı ana pencereden başlatabilirsin.",
-                "Ctrl+Alt+A is used by another program. You can start Ambiyans from its main window.",
-                "Otro programa usa Ctrl+Alt+A. Puedes iniciar Ambiyans desde su ventana principal.",
-                "Outro programa usa Ctrl+Alt+A. Você pode iniciar o Ambiyans pela janela principal.",
-                "Ctrl+Alt+A est utilisé par un autre programme. Vous pouvez démarrer Ambiyans depuis sa fenêtre principale.",
-                "Ctrl+Alt+A wird von einem anderen Programm verwendet. Du kannst Ambiyans im Hauptfenster starten.",
-                "Ctrl+Alt+A занято другой программой. Запустите Ambiyans из главного окна.",
-                "Ctrl+Alt+A 已被其他程序占用。可从主窗口启动 Ambiyans。",
-                "Ctrl+Alt+A は別のプログラムで使用されています。メインウィンドウから Ambiyans を開始できます。",
-                "Ctrl+Alt+A를 다른 프로그램이 사용 중입니다. 기본 창에서 Ambiyans를 시작할 수 있습니다.",
-                "Ctrl+Alt+A è usato da un altro programma. Puoi avviare Ambiyans dalla sua finestra principale.",
-                "Ctrl+Alt+A jest używany przez inny program. Możesz uruchomić Ambiyans z jego głównego okna." },
+            new[] { "Ctrl+Alt+A başka bir program tarafından kullanılıyor. Ambiyans ışığını ana pencereden başlatabilirsin.",
+                "Ctrl+Alt+A is used by another program. You can start Ambiance Ultrawide from its main window.",
+                "Otro programa usa Ctrl+Alt+A. Puedes iniciar Ambiance Ultrawide desde su ventana principal.",
+                "Outro programa usa Ctrl+Alt+A. Você pode iniciar o Ambiance Ultrawide pela janela principal.",
+                "Ctrl+Alt+A est utilisé par un autre programme. Vous pouvez démarrer Ambiance Ultrawide depuis sa fenêtre principale.",
+                "Ctrl+Alt+A wird von einem anderen Programm verwendet. Du kannst Ambiance Ultrawide im Hauptfenster starten.",
+                "Ctrl+Alt+A занято другой программой. Запустите Ambiance Ultrawide из главного окна.",
+                "Ctrl+Alt+A 已被其他程序占用。可从主窗口启动 Ambiance Ultrawide。",
+                "Ctrl+Alt+A は別のプログラムで使用されています。メインウィンドウから Ambiance Ultrawide を開始できます。",
+                "Ctrl+Alt+A를 다른 프로그램이 사용 중입니다. 기본 창에서 Ambiance Ultrawide를 시작할 수 있습니다.",
+                "Ctrl+Alt+A è usato da un altro programma. Puoi avviare Ambiance Ultrawide dalla sua finestra principale.",
+                "Ctrl+Alt+A jest używany przez inny program. Możesz uruchomić Ambiance Ultrawide z jego głównego okna." },
             new[] { "Önce oyun penceresine tıkla, sonra Ctrl+Alt+A'ya bas.",
                 "Click the game window first, then press Ctrl+Alt+A.",
                 "Primero haz clic en la ventana del juego y luego pulsa Ctrl+Alt+A.",

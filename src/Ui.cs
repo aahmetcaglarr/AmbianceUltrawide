@@ -1,4 +1,4 @@
-﻿// Ayar penceresi (Ui.xaml) ile programin cekirdegi arasindaki baglanti.
+// Ayar penceresi (Ui.xaml) ile programin cekirdegi arasindaki baglanti.
 
 using System;
 using System.Collections.Generic;
@@ -14,13 +14,13 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-[assembly: System.Reflection.AssemblyTitle("Ambiyans")]
-[assembly: System.Reflection.AssemblyProduct("Ambiyans")]
+[assembly: System.Reflection.AssemblyTitle("Ambiance Ultrawide")]
+[assembly: System.Reflection.AssemblyProduct("Ambiance Ultrawide")]
 [assembly: System.Reflection.AssemblyDescription("Ultrawide ekranlar için keskin oyun görüntüsü ve ambiyans ışığı")]
 [assembly: System.Reflection.AssemblyVersion("1.0.0.0")]
 [assembly: System.Reflection.AssemblyFileVersion("1.0.0.0")]
 
-namespace Ambiyans
+namespace Ambiance
 {
     public class WinItem
     {
@@ -54,7 +54,7 @@ namespace Ambiyans
 
         static void BuildUi()
         {
-            using (var s = typeof(App).Assembly.GetManifestResourceStream("Ambiyans.Ui.xaml"))
+            using (var s = typeof(App).Assembly.GetManifestResourceStream("Ambiance.Ui.xaml"))
                 ui = (Window)XamlReader.Load(s);
 
             var logo = LoadLogo();
@@ -74,7 +74,7 @@ namespace Ambiyans
                 if (!hideTipShown)
                 {
                     hideTipShown = true;
-                    if (notify) tray.ShowBalloonTip(3000, L("Ambiyans arka planda çalışıyor"),
+                    if (notify) tray.ShowBalloonTip(3000, L("Ambiance Ultrawide arka planda çalışıyor"),
                         L("Saatin yanındaki simgeden tekrar açabilir ya da Çıkış diyebilirsin."), System.Windows.Forms.ToolTipIcon.Info);
                 }
             };
@@ -234,7 +234,7 @@ namespace Ambiyans
             F<TextBlock>("SideStatus").Text = L(active ? "Çalışıyor" : "Kapalı");
             F<TextBlock>("StatusTitle").Text = active ? (title.Length > 0 ? title : L("Oyun")) : L("Başlamaya hazır");
             F<TextBlock>("StatusSub").Text = L(active
-                ? "Ambiyans açık. Durdurmak için Ctrl\u2060+\u2060Alt\u2060+\u2060A'ya bas ya da aşağıdaki butonu kullan."
+                ? "Ambiyans ışığı açık. Durdurmak için Ctrl\u2060+\u2060Alt\u2060+\u2060A'ya bas ya da aşağıdaki butonu kullan."
                 : "Aşağıdan oyununu seç ya da oyundayken Ctrl\u2060+\u2060Alt\u2060+\u2060A'ya bas.");
             F<TextBlock>("StartText").Text = L(active ? "Durdur" : "Başlat");
             F<TextBlock>("StartIcon").Text = active ? "" : "";
@@ -366,7 +366,7 @@ namespace Ambiyans
         {
             try
             {
-                using (var s = typeof(App).Assembly.GetManifestResourceStream("Ambiyans.logo.png"))
+                using (var s = typeof(App).Assembly.GetManifestResourceStream("Ambiance.logo.png"))
                 {
                     var b = new BitmapImage();
                     b.BeginInit(); b.CacheOption = BitmapCacheOption.OnLoad; b.StreamSource = s; b.EndInit(); b.Freeze();
@@ -408,7 +408,7 @@ namespace Ambiyans
             try
             {
                 using (var k = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(RunKey))
-                    return k != null && k.GetValue("Ambiyans") != null;
+                    return k != null && k.GetValue("Ambiance Ultrawide") != null;
             }
             catch { return false; }
         }
@@ -421,8 +421,8 @@ namespace Ambiyans
                 using (var k = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(RunKey, true))
                 {
                     if (k == null) return;
-                    if (on) k.SetValue("Ambiyans", "\"" + System.Reflection.Assembly.GetExecutingAssembly().Location + "\" --tray");
-                    else k.DeleteValue("Ambiyans", false);
+                    if (on) k.SetValue("Ambiance Ultrawide", "\"" + System.Reflection.Assembly.GetExecutingAssembly().Location + "\" --tray");
+                    else k.DeleteValue("Ambiance Ultrawide", false);
                 }
             }
             catch { UiMessage("Başlangıç ayarı değiştirilemedi."); }

@@ -1,4 +1,4 @@
-# Ambiyans ikonunu ciz: app.ico (16..256) ve logo.png (256)
+# Ambiance Ultrawide ikonunu ciz: app.ico (16..256) ve logo.png (256)
 Add-Type -AssemblyName System.Drawing
 $dir = Split-Path $MyInvocation.MyCommand.Path
 

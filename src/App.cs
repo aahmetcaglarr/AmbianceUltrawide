@@ -1,4 +1,4 @@
-// Ambiyans - pencereli oyunun etrafini oyunun renkleriyle aydinlatir (YouTube ambiyans modu / Ambilight gibi).
+// Ambiance Ultrawide - pencereli oyunun etrafini oyunun renkleriyle aydinlatir (YouTube ambiyans modu / Ambilight gibi).
 // Kullanim: oyunu pencere modunda (ornegin 1920x1080) ac, oyun penceresine tikla, Ctrl+Alt+A'ya bas.
 // Oyun ekranin ortasina alinir, cevresi oyunun kenar renkleriyle aydinlanir. Tekrar Ctrl+Alt+A ile kapanir.
 // Oyunun bellegine dokunmaz; sadece ekrandaki pikselleri okur ve pencereyi ortalar.
@@ -17,7 +17,7 @@ using WF = System.Windows.Forms;
 
 [assembly: System.Runtime.Versioning.TargetFramework(".NETFramework,Version=v4.8")]
 
-namespace Ambiyans
+namespace Ambiance
 {
     static class N
     {
@@ -171,7 +171,7 @@ namespace Ambiyans
         [STAThread]
         static void Main(string[] args)
         {
-            // tani: Ambiyans.exe --ddshot dosya.png  (ekran kartiyla tum ekrani yakalayip kaydeder)
+            // tani: AmbianceUltrawide.exe --ddshot dosya.png  (ekran kartiyla tum ekrani yakalayip kaydeder)
             if (args.Length == 2 && args[0] == "--ddshot")
             {
                 var bnd = WF.Screen.PrimaryScreen.Bounds;
@@ -189,8 +189,8 @@ namespace Ambiyans
                 return;
             }
             bool created;
-            var mutex = new Mutex(true, "Ambiyans_TekKopya", out created);
-            var showEvent = new EventWaitHandle(false, EventResetMode.AutoReset, "Ambiyans_Goster");
+            var mutex = new Mutex(true, "AmbianceUltrawide_SingleInstance", out created);
+            var showEvent = new EventWaitHandle(false, EventResetMode.AutoReset, "AmbianceUltrawide_Show");
             if (!created) { showEvent.Set(); return; }   // zaten calisiyor: onun penceresini one getir
 
             bool trayMode = false;
@@ -218,7 +218,7 @@ namespace Ambiyans
             win.ShowActivated = false;
             win.Topmost = true;
             win.Background = Brushes.Black;
-            win.Title = "Ambiyans";
+            win.Title = "Ambiance Ultrawide";
             img = new Image();
             img.Stretch = Stretch.Fill;
             RenderOptions.SetBitmapScalingMode(img, BitmapScalingMode.Linear);
@@ -256,7 +256,7 @@ namespace Ambiyans
 
             for (int i = 0; i < 4; i++) strips[i] = new FeatherWin();
             SetupTray();
-            if (!hk) Notify("Kısayol kullanılamıyor", "Ctrl+Alt+A başka bir program tarafından kullanılıyor. Ambiyansı ana pencereden başlatabilirsin.", true);
+            if (!hk) Notify("Kısayol kullanılamıyor", "Ctrl+Alt+A başka bir program tarafından kullanılıyor. Ambiyans ışığını ana pencereden başlatabilirsin.", true);
             if (!trayMode) ShowSettings();
 
             // ikinci kez acilirsa pencereyi one getir
@@ -276,7 +276,7 @@ namespace Ambiyans
             th.Priority = ThreadPriority.BelowNormal;
             th.Start();
 
-            // test icin: Ambiyans.exe --hwnd <sayi>
+            // test icin: AmbianceUltrawide.exe --hwnd <sayi>
             for (int i = 0; i + 1 < args.Length; i++)
                 if (args[i] == "--hwnd")
                 {
@@ -303,9 +303,9 @@ namespace Ambiyans
         {
             tray = new WF.NotifyIcon();
             tray.Icon = MakeIcon();
-            tray.Text = "Ambiyans (Ctrl+Alt+A)";
+            tray.Text = "Ambiance Ultrawide (Ctrl+Alt+A)";
             var menu = new WF.ContextMenuStrip();
-            var open = new WF.ToolStripMenuItem(L("Ambiyans'ı aç"));
+            var open = new WF.ToolStripMenuItem(L("Ambiance Ultrawide'ı aç"));
             open.Font = new SD.Font(open.Font, SD.FontStyle.Bold);
             open.Click += delegate { ShowSettings(); };
             menu.Items.Add(open);
@@ -440,7 +440,7 @@ namespace Ambiyans
             IntPtr fg = N.GetForegroundWindow();
             if (fg == IntPtr.Zero || fg == hwnd || fg == N.GetShellWindow() || !N.IsWindowVisible(fg))
             {
-                Notify("Ambiyans", "Önce oyun penceresine tıkla, sonra Ctrl+Alt+A'ya bas.", false);
+                Notify("Ambiance Ultrawide", "Önce oyun penceresine tıkla, sonra Ctrl+Alt+A'ya bas.", false);
                 return;
             }
             Activate(fg);
@@ -535,7 +535,7 @@ namespace Ambiyans
 
         static string SettingsPath()
         {
-            return System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Ambiyans.ini");
+            return System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "AmbianceUltrawide.ini");
         }
         static void LoadSettings()
         {

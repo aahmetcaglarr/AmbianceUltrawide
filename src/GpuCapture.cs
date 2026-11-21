@@ -4,7 +4,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace Ambiyans
+namespace Ambiance
 {
     class GpuCapture : IDisposable
     {
