@@ -4,3 +4,6 @@ src/out/
 *.zip
 Oyun-Modu.cmd
 YAYINLAMA.md
+docs/video/
+docs/screenshots/store/*
+!docs/screenshots/store/en/
