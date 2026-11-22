@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Ambiance Video
 // @namespace    https://aahmetcaglarr.github.io/AmbianceUltrawide/
-// @version      1.2.0
+// @version      1.3.0
 // @description  Fullscreen videos on any site with ambient light synced to the scene, instead of black bars. Made for iPad Safari.
 // @author       CaglarSoft
 // @homepageURL  https://github.com/aahmetcaglarr/AmbianceUltrawide
@@ -27,18 +27,18 @@
 
   // ---------- metinler ----------
   const T = {
-    en: ["Ambient fullscreen", "Exit", "Soft", "Detailed"],
-    tr: ["Ambiyans tam ekran", "Çık", "Sade", "Detaylı"],
-    es: ["Pantalla completa ambiental", "Salir", "Suave", "Detallado"],
-    pt: ["Tela cheia com luz ambiente", "Sair", "Suave", "Detalhado"],
-    fr: ["Plein écran d'ambiance", "Quitter", "Doux", "Détaillé"],
-    de: ["Ambiente-Vollbild", "Beenden", "Sanft", "Detailliert"],
-    ru: ["Полный экран с подсветкой", "Выйти", "Мягкий", "Детальный"],
-    zh: ["氛围灯全屏", "退出", "柔和", "细节"],
-    ja: ["アンビエント全画面", "終了", "ソフト", "詳細"],
-    ko: ["앰비언트 전체 화면", "나가기", "부드럽게", "상세"],
-    it: ["Schermo intero ambientale", "Esci", "Morbido", "Dettagliato"],
-    pl: ["Pełny ekran z podświetleniem", "Wyjdź", "Łagodny", "Szczegółowy"],
+    en: ["Ambient fullscreen", "Exit", "Soft", "Detailed", "Black bars", "Auto", "Off", "Cinema"],
+    tr: ["Ambiyans tam ekran", "Çık", "Sade", "Detaylı", "Siyah bantlar", "Oto", "Kapalı", "Sinema"],
+    es: ["Pantalla completa ambiental", "Salir", "Suave", "Detallado", "Bandas negras", "Auto", "No", "Cine"],
+    pt: ["Tela cheia com luz ambiente", "Sair", "Suave", "Detalhado", "Barras pretas", "Auto", "Não", "Cinema"],
+    fr: ["Plein écran d'ambiance", "Quitter", "Doux", "Détaillé", "Bandes noires", "Auto", "Non", "Cinéma"],
+    de: ["Ambiente-Vollbild", "Beenden", "Sanft", "Detailliert", "Schwarze Balken", "Auto", "Aus", "Kino"],
+    ru: ["Полный экран с подсветкой", "Выйти", "Мягкий", "Детальный", "Чёрные полосы", "Авто", "Выкл.", "Кино"],
+    zh: ["氛围灯全屏", "退出", "柔和", "细节", "黑边", "自动", "关", "影院"],
+    ja: ["アンビエント全画面", "終了", "ソフト", "詳細", "黒帯", "自動", "オフ", "シネマ"],
+    ko: ["앰비언트 전체 화면", "나가기", "부드럽게", "상세", "검은 여백", "자동", "끔", "시네마"],
+    it: ["Schermo intero ambientale", "Esci", "Morbido", "Dettagliato", "Bande nere", "Auto", "No", "Cinema"],
+    pl: ["Pełny ekran z podświetleniem", "Wyjdź", "Łagodny", "Szczegółowy", "Czarne pasy", "Auto", "Wył.", "Kino"],
   };
   const S = T[(navigator.language || "en").slice(0, 2).toLowerCase()] || T.en;
 
@@ -75,16 +75,14 @@
       box-shadow: 0 4px 18px rgba(0,0,0,.35); transition: opacity .25s; -webkit-tap-highlight-color: transparent; }
     .btn svg { width: 20px; height: 20px; }
     .btn.hidden { opacity: 0; pointer-events: none; }
-    .badge { position: fixed; left: 6px; bottom: 6px; z-index: 2147483646; max-width: calc(100% - 12px); padding: 4px 8px; border-radius: 6px;
-      background: rgba(255,138,61,.92); color: #111; font: 600 11px/1.3 -apple-system, system-ui, sans-serif; pointer-events: none; transition: opacity .3s; }
-    .badge.hidden { opacity: 0; }
     .stage { position: fixed; inset: 0; z-index: 2147483647; background: #000; overflow: hidden; }
-    .glow { position: absolute; inset: 0; width: 100%; height: 100%; transform: scale(1.18); transition: filter .3s; }
+    .glow { position: absolute; transition: filter .3s; }
+    .mask { position: absolute; inset: 0; z-index: 3; pointer-events: none; overflow: hidden; display: none; }
     .soft .glow { filter: blur(70px) saturate(1.35) brightness(.95); }
     .detailed .glow { filter: blur(22px) saturate(1.25) brightness(.9); }
-    .shade { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse at center, rgba(0,0,0,0) 45%, rgba(0,0,0,.35) 100%); }
+    .shade { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse at center, rgba(0,0,0,0) 55%, rgba(0,0,0,.18) 100%); }
     .bar { position: absolute; top: max(14px, env(safe-area-inset-top)); right: max(14px, env(safe-area-inset-right)); display: flex; gap: 8px;
-      transition: opacity .25s; z-index: 3; }
+      transition: opacity .25s; z-index: 5; }
     .bar.hidden { opacity: 0; pointer-events: none; }
     .bar button { border: 1px solid rgba(255,255,255,.2); border-radius: 999px; background: rgba(20,18,26,.6); color: #fff; font-size: 14px;
       font-weight: 600; padding: 9px 16px; cursor: pointer; -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
@@ -107,24 +105,7 @@
   root.appendChild(btn);
   (document.body || document.documentElement).appendChild(host);
 
-  // ---------- teshis etiketi (gecici) ----------
-  // Betigin calistigi her sayfa ve cercevede kisa sure bilgi gosterir; iPad'de gelistirici araci olmadan sorun bulmak icin.
-  const VERSION = "1.2.0";
   const inFrame = window.top !== window;
-  const badge = document.createElement("div");
-  badge.className = "badge hidden";
-  root.appendChild(badge);
-  let badgeTimer = 0;
-  function debugBadge(ms) {
-    const d = deep();
-    const big = d.videos.filter(bigEnough).length;
-    const fs = document.fullscreenEnabled || document.webkitFullscreenEnabled;
-    badge.textContent = "Ambiance " + VERSION + " · " + (inFrame ? "iframe " + location.hostname : "page") +
-      " · video " + d.videos.length + " (" + big + " big) · iframe " + d.frames.length + " · fullscreen " + (fs ? "yes" : "no");
-    badge.classList.remove("hidden");
-    clearTimeout(badgeTimer);
-    badgeTimer = setTimeout(() => badge.classList.add("hidden"), ms);
-  }
 
   // ---------- dugme: dokunulan / oynatilan videonun kosesinde ----------
   let target = null, hideTimer = 0, posRaf = 0;
@@ -190,7 +171,6 @@
     const p = e.touches && e.touches[0] ? e.touches[0] : e;
     const v = videoAt(p.clientX, p.clientY);
     if (v) showBtn(v);
-    if (e.type !== "pointermove") debugBadge(4000);
   };
   // pencere seviyesinde ve en once dinle: bazi oynaticilar dokunuslari belge seviyesinde durduruyor
   for (const t of ["pointerdown", "pointermove", "touchstart", "mousedown"]) window.addEventListener(t, onPoint, { capture: true, passive: true });
@@ -243,10 +223,103 @@
   });
 
   // ---------- ambiyans tam ekran ----------
-  let stage = null, video = null, marker = null, saved = null, canvas = null, ctx = null, bar = null, loopId = 0, barTimer = 0, styleGuard = null, askedParent = false;
+  let stage = null, video = null, marker = null, saved = null, canvas = null, ctx = null, bar = null, loopId = 0, barTimer = 0,
+    styleGuard = null, askedParent = false, masks = [], barsBtn = null;
   const FILL = "position:absolute!important;inset:0!important;width:100%!important;height:100%!important;" +
     "max-width:none!important;max-height:none!important;object-fit:contain!important;transform:none!important;" +
     "margin:0!important;z-index:2!important;background:transparent!important;display:block!important;opacity:1!important;visibility:visible!important";
+
+  // Isik tuvali: ortasi videonun kendisi, cevresinde kenar renklerinin disa uzatildigi bir pay var.
+  // Pay ekranin disinda kalir; bulaniklastirma kenarlari karartsa bile o kararma gorunmez.
+  let GW = 48, GH = 27, P = 12;
+  function sizeGlow() {
+    const d = style === "detailed";
+    GW = d ? 128 : 48; GH = d ? 72 : 27; P = Math.round(GW * 0.3);
+    for (const c of [canvas].concat(masks.map((m) => m.canvas))) {
+      c.width = GW + 2 * P; c.height = GH + 2 * P;
+      c.style.left = (-P / GW * 100) + "%"; c.style.top = (-P / GH * 100) + "%";
+      c.style.width = ((GW + 2 * P) / GW * 100) + "%"; c.style.height = ((GH + 2 * P) / GH * 100) + "%";
+    }
+  }
+
+  // ---------- videonun icine gomulu siyah bantlar ----------
+  // "auto": video pikselleri okunabiliyorsa bantlari kendisi bulur. "cinema": 2.39:1 film varsayar. "off": dokunmaz.
+  let barsMode = store.get("bars", "auto");
+  let crop = { t: 0, b: 0, l: 0, r: 0 };
+  let readable = true, probe = null, pctx = null, hist = [], lastProbe = 0;
+
+  function cinemaCrop() {
+    const a = video.videoWidth / video.videoHeight;
+    if (!a || a >= 2.3) return { t: 0, b: 0, l: 0, r: 0 };
+    const f = (1 - a / 2.39) / 2;
+    return { t: f, b: f, l: 0, r: 0 };
+  }
+  function detectBars() {
+    if (!readable) return;
+    const N = 120;   // satir/sutun cozunurlugu: bant siniri ~1% hassasiyetle bulunur
+    if (!probe) { probe = document.createElement("canvas"); probe.width = N; probe.height = N; pctx = probe.getContext("2d", { willReadFrequently: true }); }
+    let d;
+    try { pctx.drawImage(video, 0, 0, N, N); d = pctx.getImageData(0, 0, N, N).data; }
+    catch (e) { readable = false; return; }   // baska alan adindan gelen video: tarayici okumaya izin vermiyor
+    // her satir/sutun icin ortalama parlaklik ve "parlak" (l > 40) piksel sayisi
+    const rowMean = new Array(N).fill(0), rowBright = new Array(N).fill(0), colBright = new Array(N).fill(0);
+    let total = 0;
+    for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) {
+      const i = (y * N + x) * 4, l = 0.2126 * d[i] + 0.7152 * d[i + 1] + 0.0722 * d[i + 2];
+      rowMean[y] += l / N; total += l;
+      if (l > 40) { rowBright[y]++; colBright[x]++; }
+    }
+    if (total / (N * N) < 14) return;          // karartma / siyah sahne: karar verme
+    // ust/alt bant: neredeyse siyah; altyazi icin satirin %25'ine kadar parlak piksele izin ver
+    const darkRow = (y) => rowMean[y] < 24 && rowBright[y] <= N * 0.25;
+    // yan bant: sutunda neredeyse hic parlak piksel olmamali (karanlik sahne kenarlari bant sanilmasin)
+    const darkCol = (x) => colBright[x] <= N * 0.02;
+    let t = 0; while (t < N / 2 && darkRow(t)) t++;
+    let b = 0; while (b < N / 2 && darkRow(N - 1 - b)) b++;
+    let l = 0; while (l < N / 2 && darkCol(l)) l++;
+    let r = 0; while (r < N / 2 && darkCol(N - 1 - r)) r++;
+    if (Math.abs(l - r) > 2) { l = 0; r = 0; }   // gercek yan bantlar simetriktir
+    hist.push({ t, b, l, r });
+    if (hist.length > 8) hist.shift();
+    // bantlar sabittir, karanlik sahneler gecicidir: son birkac olcumun en kucugunu al
+    const min = (k) => Math.min.apply(null, hist.map((h) => h[k])) / N;
+    // cok ince bantlari yok say; bulunanlari resmin kenarina biraz tasir ki arada ince siyah cizgi kalmasin
+    const clean = (f) => (f < 0.03 ? 0 : Math.min(f + 0.006, 0.35));
+    setCrop({ t: clean(min("t")), b: clean(min("b")), l: clean(min("l")), r: clean(min("r")) });
+  }
+  function setCrop(c) {
+    if (c.t === crop.t && c.b === crop.b && c.l === crop.l && c.r === crop.r) return;
+    crop = c;
+    layoutMasks();
+  }
+  function applyBarsMode() {
+    hist = [];
+    if (barsMode === "off") setCrop({ t: 0, b: 0, l: 0, r: 0 });
+    else if (barsMode === "cinema") setCrop(cinemaCrop());
+    else { setCrop({ t: 0, b: 0, l: 0, r: 0 }); detectBars(); }
+    if (barsBtn) barsBtn.textContent = S[4] + ": " + (barsMode === "off" ? S[6] : barsMode === "cinema" ? S[7] : S[5]);
+  }
+
+  // Bantlarin ustune ayni isigi koyan katmanlar (ust+alt ve sol+sag). Bantin oldugu yerde video ustunde gorunur.
+  function layoutMasks() {
+    if (!stage || !video) return;
+    const W = stage.clientWidth, H = stage.clientHeight, vw = video.videoWidth, vh = video.videoHeight;
+    if (!W || !H || !vw || !vh) return;
+    const s = Math.min(W / vw, H / vh), cw = vw * s, ch = vh * s, cx = (W - cw) / 2, cy = (H - ch) / 2;
+    const [tb, lr] = masks;
+    // Sadece videonun icindeki bant alanini kapla; disaridaki bosluk zaten alttaki isikla dolu.
+    // Video ekranin altina kadar iniyorsa en alttaki 64 px'i birak: oynatici kontrolleri orada.
+    if (crop.t > 0 || crop.b > 0) {
+      const a1 = cy, a2 = cy + crop.t * ch, b1 = cy + ch * (1 - crop.b), b2 = Math.min(cy + ch, H - 64);
+      tb.el.style.clipPath = `polygon(0 ${a1}px,${W}px ${a1}px,${W}px ${a2}px,0 ${a2}px,0 ${b1}px,${W}px ${b1}px,${W}px ${Math.max(b1, b2)}px,0 ${Math.max(b1, b2)}px)`;
+      tb.el.style.display = "block";
+    } else tb.el.style.display = "none";
+    if (crop.l > 0 || crop.r > 0) {
+      const a1 = cx, a2 = cx + crop.l * cw, b1 = cx + cw * (1 - crop.r), b2 = cx + cw;
+      lr.el.style.clipPath = `polygon(${a1}px 0,${a1}px ${H}px,${a2}px ${H}px,${a2}px 0,${b1}px 0,${b1}px ${H}px,${b2}px ${H}px,${b2}px 0)`;
+      lr.el.style.display = "block";
+    } else lr.el.style.display = "none";
+  }
 
   function enter(v) {
     if (stage) return;
@@ -259,28 +332,43 @@
     stage.className = "stage " + style;
     canvas = document.createElement("canvas");
     canvas.className = "glow";
-    const detailed = style === "detailed";
-    canvas.width = detailed ? 128 : 48; canvas.height = detailed ? 72 : 27;
     ctx = canvas.getContext("2d", { alpha: false });
+    masks = [0, 1].map(() => {
+      const el = document.createElement("div");
+      el.className = "mask";
+      const c = document.createElement("canvas");
+      c.className = "glow";
+      const sh = document.createElement("div");
+      sh.className = "shade";          // arkadaki isikla birebir ayni gorunsun diye ayni kararma
+      el.append(c, sh);
+      return { el, canvas: c, ctx: c.getContext("2d", { alpha: false }) };
+    });
+    sizeGlow();
     const shade = document.createElement("div");
     shade.className = "shade";
     bar = document.createElement("div");
     bar.className = "bar";
+    barsBtn = document.createElement("button");
+    barsBtn.addEventListener("click", () => {
+      barsMode = barsMode === "auto" ? "cinema" : barsMode === "cinema" ? "off" : "auto";
+      store.set("bars", barsMode);
+      applyBarsMode();
+      pokeBar();
+    });
     const styleBtn = document.createElement("button");
-    styleBtn.textContent = detailed ? S[3] : S[2];
+    styleBtn.textContent = style === "detailed" ? S[3] : S[2];
     styleBtn.addEventListener("click", () => {
       style = style === "soft" ? "detailed" : "soft";
       store.set("style", style);
       stage.className = "stage " + style;
-      const d = style === "detailed";
-      canvas.width = d ? 128 : 48; canvas.height = d ? 72 : 27;
-      styleBtn.textContent = d ? S[3] : S[2];
+      sizeGlow();
+      styleBtn.textContent = style === "detailed" ? S[3] : S[2];
       pokeBar();
     });
     const exitBtn = document.createElement("button");
     exitBtn.textContent = "✕  " + S[1];
     exitBtn.addEventListener("click", exit);
-    bar.append(styleBtn, exitBtn);
+    bar.append(barsBtn, styleBtn, exitBtn);
     stage.append(canvas, shade);
     root.appendChild(stage);
 
@@ -293,6 +381,7 @@
     v.controls = true;
     v.playsInline = true;
     stage.appendChild(v);
+    for (const m of masks) stage.appendChild(m.el);
     stage.appendChild(bar);
     btn.classList.add("hidden");
     saved.overflow = document.documentElement.style.overflow;   // sayfanin kaydirma cubugu gorunmesin
@@ -301,6 +390,10 @@
     stage.addEventListener("pointerdown", pokeBar, { passive: true });
     stage.addEventListener("pointermove", pokeBar, { passive: true });
     document.addEventListener("keydown", onKey, true);
+    window.addEventListener("resize", layoutMasks);
+    v.addEventListener("loadedmetadata", applyBarsMode);
+    readable = true; probe = null;
+    applyBarsMode();
     pokeBar();
 
     // Gercek tam ekran dene; iframe'e izin verilmemisse (ya da reddedilirse) dis sayfadan bu cerceveyi buyutmesini iste
@@ -315,14 +408,26 @@
     tick();
   }
 
-  // video karesini kucuk tuvale ciz; CSS bulaniklastirip ekrana yayar
+  // video karesini (bantlar haric) kucuk tuvalin ortasina ciz, kenar renklerini paya uzat; CSS bulaniklastirip ekrana yayar
   function draw() {
-    if (!stage || !video) return;
-    if (video.readyState >= 2) { try { ctx.drawImage(video, 0, 0, canvas.width, canvas.height); } catch (e) { /* cizilemeyen video */ } }
+    if (!stage || !video || video.readyState < 2) return;
+    const vw = video.videoWidth, vh = video.videoHeight;
+    if (!vw || !vh) return;
+    const c = crop;
+    try {
+      ctx.drawImage(video, c.l * vw, c.t * vh, vw * (1 - c.l - c.r), vh * (1 - c.t - c.b), P, P, GW, GH);
+      ctx.drawImage(canvas, P, P, GW, 1, P, 0, GW, P);                       // ust kenari yukari uzat
+      ctx.drawImage(canvas, P, P + GH - 1, GW, 1, P, P + GH, GW, P);         // alt kenari asagi
+      ctx.drawImage(canvas, P, 0, 1, GH + 2 * P, 0, 0, P, GH + 2 * P);       // sol kenari sola (koseler dahil)
+      ctx.drawImage(canvas, P + GW - 1, 0, 1, GH + 2 * P, P + GW, 0, P, GH + 2 * P);
+      for (const m of masks) if (m.el.style.display === "block") m.ctx.drawImage(canvas, 0, 0);
+    } catch (e) { /* cizilemeyen video */ }
   }
   function tick() {
     if (!stage) return;
     draw();
+    const now = Date.now();
+    if (barsMode === "auto" && readable && now - lastProbe > 500) { lastProbe = now; detectBars(); }
     if (video.requestVideoFrameCallback && !video.paused) loopId = video.requestVideoFrameCallback(tick);
     else loopId = setTimeout(tick, video.paused ? 250 : 33);
   }
@@ -335,8 +440,9 @@
   }
   function onKey(e) { if (e.key === "Escape") exit(); }
   function onFs() {
+    layoutMasks();
     const fs = document.fullscreenElement || document.webkitFullscreenElement;
-    if (!fs && stage) exit();   // kullanici tam ekrandan cikti
+    if (!fs && stage && !askedParent) exit();   // kullanici tam ekrandan cikti
   }
 
   function exit() {
@@ -349,6 +455,8 @@
     document.removeEventListener("keydown", onKey, true);
     document.removeEventListener("fullscreenchange", onFs);
     document.removeEventListener("webkitfullscreenchange", onFs);
+    window.removeEventListener("resize", layoutMasks);
+    v.removeEventListener("loadedmetadata", applyBarsMode);
     const fs = document.fullscreenElement || document.webkitFullscreenElement;
     if (fs) { const x = document.exitFullscreen || document.webkitExitFullscreen; if (x) { try { const p = x.call(document); if (p && p.catch) p.catch(() => {}); } catch (e) { /* zaten cikti */ } } }
     // videoyu yerine ve eski haline geri koy
@@ -359,11 +467,9 @@
     document.documentElement.style.overflow = saved.overflow;
     if (askedParent) { askedParent = false; tell("exit"); }
     s.remove();
-    video = marker = canvas = ctx = bar = null;
+    video = marker = canvas = ctx = bar = barsBtn = null;
+    masks = [];
     // tam ekrandan cikista bazi oynaticilar duraklatir; oynuyorsa devam etsin
     if (v.paused === false) { const p = v.play(); if (p && p.catch) p.catch(() => {}); }
   }
-
-  // teshis: sayfa acilinca bir kez goster (oynaticilar videoyu gec ekledigi icin biraz bekle)
-  setTimeout(() => debugBadge(12000), 2500);
 })();
