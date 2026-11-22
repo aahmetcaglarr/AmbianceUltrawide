@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Ambiance Video
 // @namespace    https://aahmetcaglarr.github.io/AmbianceUltrawide/
-// @version      1.1.0
+// @version      1.2.0
 // @description  Fullscreen videos on any site with ambient light synced to the scene, instead of black bars. Made for iPad Safari.
 // @author       CaglarSoft
 // @homepageURL  https://github.com/aahmetcaglarr/AmbianceUltrawide
@@ -75,6 +75,9 @@
       box-shadow: 0 4px 18px rgba(0,0,0,.35); transition: opacity .25s; -webkit-tap-highlight-color: transparent; }
     .btn svg { width: 20px; height: 20px; }
     .btn.hidden { opacity: 0; pointer-events: none; }
+    .badge { position: fixed; left: 6px; bottom: 6px; z-index: 2147483646; max-width: calc(100% - 12px); padding: 4px 8px; border-radius: 6px;
+      background: rgba(255,138,61,.92); color: #111; font: 600 11px/1.3 -apple-system, system-ui, sans-serif; pointer-events: none; transition: opacity .3s; }
+    .badge.hidden { opacity: 0; }
     .stage { position: fixed; inset: 0; z-index: 2147483647; background: #000; overflow: hidden; }
     .glow { position: absolute; inset: 0; width: 100%; height: 100%; transform: scale(1.18); transition: filter .3s; }
     .soft .glow { filter: blur(70px) saturate(1.35) brightness(.95); }
@@ -104,6 +107,25 @@
   root.appendChild(btn);
   (document.body || document.documentElement).appendChild(host);
 
+  // ---------- teshis etiketi (gecici) ----------
+  // Betigin calistigi her sayfa ve cercevede kisa sure bilgi gosterir; iPad'de gelistirici araci olmadan sorun bulmak icin.
+  const VERSION = "1.2.0";
+  const inFrame = window.top !== window;
+  const badge = document.createElement("div");
+  badge.className = "badge hidden";
+  root.appendChild(badge);
+  let badgeTimer = 0;
+  function debugBadge(ms) {
+    const d = deep();
+    const big = d.videos.filter(bigEnough).length;
+    const fs = document.fullscreenEnabled || document.webkitFullscreenEnabled;
+    badge.textContent = "Ambiance " + VERSION + " · " + (inFrame ? "iframe " + location.hostname : "page") +
+      " · video " + d.videos.length + " (" + big + " big) · iframe " + d.frames.length + " · fullscreen " + (fs ? "yes" : "no");
+    badge.classList.remove("hidden");
+    clearTimeout(badgeTimer);
+    badgeTimer = setTimeout(() => badge.classList.add("hidden"), ms);
+  }
+
   // ---------- dugme: dokunulan / oynatilan videonun kosesinde ----------
   let target = null, hideTimer = 0, posRaf = 0;
 
@@ -113,6 +135,8 @@
   }
   // Oynaticilarin "shadow DOM" icine sakladigi videolari ve cerceveleri de bul (sik cagrildigi icin kisa sureli onbellek)
   let deepCache = { t: 0, videos: [], frames: [] };
+  const hooked = new WeakSet();
+  const onPlay = (e) => { const v = e.composedPath ? e.composedPath()[0] : e.target; if (v instanceof HTMLVideoElement && bigEnough(v)) showBtn(v); };
   function deep() {
     const now = Date.now();
     if (now - deepCache.t < 700) return deepCache;
@@ -120,15 +144,28 @@
     (function walk(r) {
       r.querySelectorAll("video").forEach((v) => videos.push(v));
       r.querySelectorAll("iframe, frame").forEach((f) => frames.push(f));
-      r.querySelectorAll("*").forEach((el) => { if (el.shadowRoot && el !== host) walk(el.shadowRoot); });
+      r.querySelectorAll("*").forEach((el) => {
+        if (el.shadowRoot && el !== host) {
+          // "play" olayi shadow DOM disina cikmaz; her golge koke ayrica dinleyici tak
+          if (!hooked.has(el.shadowRoot)) { hooked.add(el.shadowRoot); el.shadowRoot.addEventListener("play", onPlay, true); }
+          walk(el.shadowRoot);
+        }
+      });
     })(document);
     deepCache = { t: now, videos, frames };
     return deepCache;
   }
   function videoAt(x, y) {
-    for (const v of deep().videos) {
+    const vids = deep().videos;
+    for (const v of vids) {
       const r = v.getBoundingClientRect();
       if (x >= r.left && x <= r.right && y >= r.top && y <= r.bottom && bigEnough(v)) return v;
+    }
+    // Saglayici iframe'lerinde sayfa genelde sadece oynaticidir: nereye dokunulursa dokunulsun en buyuk videoyu al
+    if (inFrame) {
+      let best = null, area = 0;
+      for (const v of vids) { const r = v.getBoundingClientRect(); if (bigEnough(v) && r.width * r.height > area) { best = v; area = r.width * r.height; } }
+      return best;
     }
     return null;
   }
@@ -148,17 +185,22 @@
     clearTimeout(hideTimer);
     hideTimer = setTimeout(() => { btn.classList.add("hidden"); cancelAnimationFrame(posRaf); }, HIDE_MS);
   }
-  const onPoint = (e) => { if (!stage) { const v = videoAt(e.clientX, e.clientY); if (v) showBtn(v); } };
-  document.addEventListener("pointerdown", onPoint, { capture: true, passive: true });
-  document.addEventListener("pointermove", onPoint, { capture: true, passive: true });
-  document.addEventListener("play", (e) => { if (e.target instanceof HTMLVideoElement && bigEnough(e.target)) showBtn(e.target); }, true);
+  const onPoint = (e) => {
+    if (stage) return;
+    const p = e.touches && e.touches[0] ? e.touches[0] : e;
+    const v = videoAt(p.clientX, p.clientY);
+    if (v) showBtn(v);
+    if (e.type !== "pointermove") debugBadge(4000);
+  };
+  // pencere seviyesinde ve en once dinle: bazi oynaticilar dokunuslari belge seviyesinde durduruyor
+  for (const t of ["pointerdown", "pointermove", "touchstart", "mousedown"]) window.addEventListener(t, onPoint, { capture: true, passive: true });
+  window.addEventListener("play", onPlay, true);
   btn.addEventListener("click", (e) => { e.preventDefault(); e.stopPropagation(); if (target) enter(target); });
 
   // ---------- cerceve koprusu ----------
   // Film sitelerinde oynatici genelde baska bir saglayicinin iframe'inin icindedir ve iframe'e tam ekran izni verilmez.
   // O zaman icerideki betik dis sayfadaki betige haber verir; dis sayfa o iframe'i ekrani kaplayacak hale getirir.
   // Ic ice iframe'lerde haber en ust sayfaya kadar zincirle iletilir.
-  const inFrame = window.top !== window;
   const MSG = "ambiance-video";
   const lifted = new Map();   // buyutulen iframe -> eski hali
   const LIFT = "position:fixed!important;inset:0!important;width:100vw!important;height:100vh!important;max-width:none!important;" +
@@ -321,4 +363,7 @@
     // tam ekrandan cikista bazi oynaticilar duraklatir; oynuyorsa devam etsin
     if (v.paused === false) { const p = v.play(); if (p && p.catch) p.catch(() => {}); }
   }
+
+  // teshis: sayfa acilinca bir kez goster (oynaticilar videoyu gec ekledigi icin biraz bekle)
+  setTimeout(() => debugBadge(12000), 2500);
 })();
