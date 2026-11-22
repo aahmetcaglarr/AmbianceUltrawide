@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Ambiance Video
 // @namespace    https://aahmetcaglarr.github.io/AmbianceUltrawide/
-// @version      1.4.0
+// @version      1.5.0
 // @description  Fullscreen videos on any site with ambient light synced to the scene, instead of black bars. Made for iPad Safari.
 // @author       CaglarSoft
 // @homepageURL  https://github.com/aahmetcaglarr/AmbianceUltrawide
@@ -84,6 +84,8 @@
     .bar { position: absolute; top: max(14px, env(safe-area-inset-top)); right: max(14px, env(safe-area-inset-right)); display: flex; gap: 8px;
       transition: opacity .25s; z-index: 5; }
     .bar.hidden { opacity: 0; pointer-events: none; }
+    .diag { position: absolute; left: 50%; top: 60px; transform: translateX(-50%); z-index: 6; max-width: 94%; padding: 8px 12px; border-radius: 8px;
+      background: rgba(0,0,0,.78); color: #ffd27a; font: 600 12px/1.45 ui-monospace, Menlo, monospace; white-space: pre-wrap; pointer-events: none; }
     .bar button { border: 1px solid rgba(255,255,255,.2); border-radius: 999px; background: rgba(20,18,26,.6); color: #fff; font-size: 14px;
       font-weight: 600; padding: 9px 16px; cursor: pointer; -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
   `;
@@ -105,6 +107,7 @@
   root.appendChild(btn);
   (document.body || document.documentElement).appendChild(host);
 
+  const VERSION = "1.5.0";
   const inFrame = window.top !== window;
 
   // ---------- dugme: dokunulan / oynatilan videonun kosesinde ----------
@@ -193,15 +196,33 @@
   function tell(cmd) { try { window.parent.postMessage({ [MSG]: cmd }, "*"); } catch (e) { /* ust sayfa yok */ } }
   function frameOf(win) { return deep().frames.find((f) => { try { return f.contentWindow === win; } catch (e) { return false; } }); }
 
-  function lift(f) {
+  function lift(f, src) {
     if (lifted.has(f)) return;
     lifted.set(f, { style: f.getAttribute("style"), overflow: document.documentElement.style.overflow });
     f.style.cssText = LIFT;
     document.documentElement.style.overflow = "hidden";
-    if (inFrame) tell("enter");
+    // TANI: ne yaptigimizi icerideki betige bildir (ekranda gosterilir)
+    const report = (fs) => {
+      const r = f.getBoundingClientRect();
+      const vv = window.visualViewport;
+      const text = (inFrame ? "frame " : "top ") + location.hostname + ": iframe " + Math.round(r.width) + "x" + Math.round(r.height) +
+        " @" + Math.round(r.left) + "," + Math.round(r.top) + " · inner " + innerWidth + "x" + innerHeight +
+        (vv ? " · vv " + Math.round(vv.width) + "x" + Math.round(vv.height) : "") + " · fs " + fs;
+      try { src.postMessage({ [MSG]: "info", text }, "*"); } catch (e) { /* yok */ }
+    };
+    if (inFrame) { tell("enter"); report("(asked own parent)"); }
     else {
       const req = f.requestFullscreen || f.webkitRequestFullscreen;
-      if (req) { try { const p = req.call(f); if (p && p.catch) p.catch(() => {}); } catch (e) { /* sayfayi kaplamasi yeterli */ } }
+      if (!req) report("unsupported");
+      else {
+        report("requested");
+        try {
+          const p = req.call(f);
+          if (p && p.then) p.then(() => setTimeout(() => report("ok"), 400), (e) => report("rejected " + e.name));
+        } catch (e) { report("threw " + e.name); }
+        // vaat hic sonuclanmasa da durumu bildir
+        setTimeout(() => { const fe = document.fullscreenElement || document.webkitFullscreenElement; report(fe === f ? "on (1.5s)" : fe ? "other " + fe.tagName : "off (1.5s)"); }, 1500);
+      }
     }
   }
   function drop(f) {
@@ -218,12 +239,50 @@
   }
   window.addEventListener("message", (e) => {
     const cmd = e.data && typeof e.data === "object" ? e.data[MSG] : null;
+    // TANI: dis sayfadan gelen bilgi
+    if (cmd === "info" && e.source === window.parent && typeof e.data.text === "string") { diagParent = [e.data.text.slice(0, 300)]; return; }
     if (cmd !== "enter" && cmd !== "exit") return;
     deepCache.t = 0;
     const f = frameOf(e.source);   // sadece bu sayfadaki bir iframe'den gelen mesajlar
     if (!f) return;
-    if (cmd === "enter") lift(f); else drop(f);
+    if (cmd === "enter") lift(f, e.source); else drop(f);
   });
+
+  // ---------- TANI MODU (gecici) ----------
+  // "Ambiance"a basinca 15 sn boyunca olcumleri ekranda gosterir; iPad'de gelistirici araci olmadan sorunu bulmak icin.
+  let diagFs = [], diagParent = [], diagEl = null, diagTimer = 0, diagEnd = 0;
+  function safeArea() {
+    const p = document.createElement("div");
+    p.style.cssText = "position:fixed;visibility:hidden;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)";
+    root.appendChild(p);
+    const cs = getComputedStyle(p), v = [cs.paddingTop, cs.paddingRight, cs.paddingBottom, cs.paddingLeft].map((x) => parseInt(x, 10) || 0).join("/");
+    p.remove();
+    return v;
+  }
+  function r4(el) { if (!el) return "-"; const r = el.getBoundingClientRect(); return Math.round(r.width) + "x" + Math.round(r.height) + " @" + Math.round(r.left) + "," + Math.round(r.top); }
+  function startDiag() {
+    diagEl = document.createElement("div");
+    diagEl.className = "diag";
+    stage.appendChild(diagEl);
+    diagEnd = Date.now() + 15000;
+    const upd = () => {
+      if (!stage || !diagEl) return;
+      if (Date.now() > diagEnd) { diagEl.remove(); diagEl = null; return; }
+      const fe = document.fullscreenElement || document.webkitFullscreenElement;
+      const vv = window.visualViewport;
+      diagEl.textContent = [
+        "Ambiance " + VERSION + " TANI · " + (inFrame ? "iframe " + location.hostname : "page " + location.hostname),
+        "fullscreen: " + diagFs.join(" → ") + " · element=" + (fe ? (fe === host ? "ours" : fe.tagName) : "none"),
+        "screen " + screen.width + "x" + screen.height + " dpr " + devicePixelRatio + " · inner " + innerWidth + "x" + innerHeight +
+          (vv ? " · vv " + Math.round(vv.width) + "x" + Math.round(vv.height) + " @" + Math.round(vv.offsetLeft) + "," + Math.round(vv.offsetTop) : "") +
+          " · safe " + safeArea(),
+        "stage " + r4(stage) + " · video el " + r4(video) + " · video " + (video ? video.videoWidth + "x" + video.videoHeight : "-"),
+        "pixels " + (readable ? "readable" : "NOT readable") + " · bars " + barsMode + " t" + crop.t.toFixed(3) + " b" + crop.b.toFixed(3),
+      ].concat(diagParent).join("\n");
+      diagTimer = setTimeout(upd, 500);
+    };
+    upd();
+  }
 
   // ---------- ambiyans tam ekran ----------
   let stage = null, video = null, marker = null, saved = null, canvas = null, ctx = null, bar = null, loopId = 0, barTimer = 0,
@@ -410,9 +469,16 @@
     // Gercek tam ekran dene; iframe'e izin verilmemisse (ya da reddedilirse) dis sayfadan bu cerceveyi buyutmesini iste
     const canFs = document.fullscreenEnabled || document.webkitFullscreenEnabled;
     const req = stage.requestFullscreen || stage.webkitRequestFullscreen;
-    const askParent = () => { if (inFrame && stage && !askedParent) { askedParent = true; tell("enter"); } };
-    if (req && canFs) { try { const p = req.call(stage); if (p && p.catch) p.catch(askParent); } catch (e) { askParent(); } }
-    else askParent();
+    const askParent = () => { if (inFrame && stage && !askedParent) { askedParent = true; tell("enter"); diagFs.push("asked parent"); } };
+    diagFs = ["enabled=" + !!canFs + " api=" + (stage.requestFullscreen ? "std" : stage.webkitRequestFullscreen ? "webkit" : "none")];
+    if (req && canFs) {
+      try {
+        const p = req.call(stage);
+        if (p && p.then) p.then(() => diagFs.push("ok"), (e) => { diagFs.push("rejected " + e.name); askParent(); });
+        else diagFs.push("requested (no promise)");
+      } catch (e) { diagFs.push("threw " + e.name); askParent(); }
+    } else askParent();
+    startDiag();
     document.addEventListener("fullscreenchange", onFs);
     document.addEventListener("webkitfullscreenchange", onFs);
     if (v.paused) { const p = v.play(); if (p && p.catch) p.catch(() => {}); }
@@ -461,6 +527,7 @@
     const v = video, s = stage;
     stage = null;
     if (styleGuard) { styleGuard.disconnect(); styleGuard = null; }
+    clearTimeout(diagTimer); diagEl = null; diagParent = [];
     clearTimeout(loopId);
     if (v.cancelVideoFrameCallback) { try { v.cancelVideoFrameCallback(loopId); } catch (e) { /* yok */ } }
     document.removeEventListener("keydown", onKey, true);
