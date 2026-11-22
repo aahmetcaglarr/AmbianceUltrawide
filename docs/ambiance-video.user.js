@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Ambiance Video
 // @namespace    https://aahmetcaglarr.github.io/AmbianceUltrawide/
-// @version      1.3.0
+// @version      1.4.0
 // @description  Fullscreen videos on any site with ambient light synced to the scene, instead of black bars. Made for iPad Safari.
 // @author       CaglarSoft
 // @homepageURL  https://github.com/aahmetcaglarr/AmbianceUltrawide
@@ -27,18 +27,18 @@
 
   // ---------- metinler ----------
   const T = {
-    en: ["Ambient fullscreen", "Exit", "Soft", "Detailed", "Black bars", "Auto", "Off", "Cinema"],
-    tr: ["Ambiyans tam ekran", "Çık", "Sade", "Detaylı", "Siyah bantlar", "Oto", "Kapalı", "Sinema"],
-    es: ["Pantalla completa ambiental", "Salir", "Suave", "Detallado", "Bandas negras", "Auto", "No", "Cine"],
-    pt: ["Tela cheia com luz ambiente", "Sair", "Suave", "Detalhado", "Barras pretas", "Auto", "Não", "Cinema"],
-    fr: ["Plein écran d'ambiance", "Quitter", "Doux", "Détaillé", "Bandes noires", "Auto", "Non", "Cinéma"],
-    de: ["Ambiente-Vollbild", "Beenden", "Sanft", "Detailliert", "Schwarze Balken", "Auto", "Aus", "Kino"],
-    ru: ["Полный экран с подсветкой", "Выйти", "Мягкий", "Детальный", "Чёрные полосы", "Авто", "Выкл.", "Кино"],
-    zh: ["氛围灯全屏", "退出", "柔和", "细节", "黑边", "自动", "关", "影院"],
-    ja: ["アンビエント全画面", "終了", "ソフト", "詳細", "黒帯", "自動", "オフ", "シネマ"],
-    ko: ["앰비언트 전체 화면", "나가기", "부드럽게", "상세", "검은 여백", "자동", "끔", "시네마"],
-    it: ["Schermo intero ambientale", "Esci", "Morbido", "Dettagliato", "Bande nere", "Auto", "No", "Cinema"],
-    pl: ["Pełny ekran z podświetleniem", "Wyjdź", "Łagodny", "Szczegółowy", "Czarne pasy", "Auto", "Wył.", "Kino"],
+    en: ["Ambient fullscreen", "Exit", "Soft", "Detailed", "Black bars", "Auto", "Off", "Cinema", "can't detect"],
+    tr: ["Ambiyans tam ekran", "Çık", "Sade", "Detaylı", "Siyah bantlar", "Oto", "Kapalı", "Sinema", "algılanamıyor"],
+    es: ["Pantalla completa ambiental", "Salir", "Suave", "Detallado", "Bandas negras", "Auto", "No", "Cine", "no detectable"],
+    pt: ["Tela cheia com luz ambiente", "Sair", "Suave", "Detalhado", "Barras pretas", "Auto", "Não", "Cinema", "não detectável"],
+    fr: ["Plein écran d'ambiance", "Quitter", "Doux", "Détaillé", "Bandes noires", "Auto", "Non", "Cinéma", "non détectable"],
+    de: ["Ambiente-Vollbild", "Beenden", "Sanft", "Detailliert", "Schwarze Balken", "Auto", "Aus", "Kino", "nicht erkennbar"],
+    ru: ["Полный экран с подсветкой", "Выйти", "Мягкий", "Детальный", "Чёрные полосы", "Авто", "Выкл.", "Кино", "не определить"],
+    zh: ["氛围灯全屏", "退出", "柔和", "细节", "黑边", "自动", "关", "影院", "无法检测"],
+    ja: ["アンビエント全画面", "終了", "ソフト", "詳細", "黒帯", "自動", "オフ", "シネマ", "検出不可"],
+    ko: ["앰비언트 전체 화면", "나가기", "부드럽게", "상세", "검은 여백", "자동", "끔", "시네마", "감지 불가"],
+    it: ["Schermo intero ambientale", "Esci", "Morbido", "Dettagliato", "Bande nere", "Auto", "No", "Cinema", "non rilevabile"],
+    pl: ["Pełny ekran z podświetleniem", "Wyjdź", "Łagodny", "Szczegółowy", "Czarne pasy", "Auto", "Wył.", "Kino", "nie wykryto"],
   };
   const S = T[(navigator.language || "en").slice(0, 2).toLowerCase()] || T.en;
 
@@ -183,7 +183,10 @@
   // Ic ice iframe'lerde haber en ust sayfaya kadar zincirle iletilir.
   const MSG = "ambiance-video";
   const lifted = new Map();   // buyutulen iframe -> eski hali
-  const LIFT = "position:fixed!important;inset:0!important;width:100vw!important;height:100vh!important;max-width:none!important;" +
+  // Boyut "100vh" DEGIL: iPad Safari'de 100vh, cubuklar acikkenki yukseklik; tam ekranda cerceve kisa kalip ortalaniyor
+  // ve ustte/altta siyah serit birakiyordu. Sabit konumda %100 her zaman gercek ekran boyutudur.
+  const LIFT = "position:fixed!important;top:0!important;left:0!important;right:0!important;bottom:0!important;" +
+    "width:100%!important;height:100%!important;max-width:none!important;min-height:100%!important;" +
     "max-height:none!important;margin:0!important;padding:0!important;border:0!important;transform:none!important;" +
     "z-index:2147483647!important;display:block!important;visibility:visible!important;opacity:1!important";
 
@@ -243,16 +246,24 @@
   }
 
   // ---------- videonun icine gomulu siyah bantlar ----------
-  // "auto": video pikselleri okunabiliyorsa bantlari kendisi bulur. "cinema": 2.39:1 film varsayar. "off": dokunmaz.
+  // "auto": video pikselleri okunabiliyorsa bantlari kendisi bulur. "2.39" / "1.85": o oranda film varsayar. "off": dokunmaz.
+  const MODES = ["auto", "2.39", "1.85", "off"];
   let barsMode = store.get("bars", "auto");
+  if (barsMode === "cinema") barsMode = "2.39";          // 1.3 surumundeki ad
+  if (MODES.indexOf(barsMode) < 0) barsMode = "auto";
   let crop = { t: 0, b: 0, l: 0, r: 0 };
   let readable = true, probe = null, pctx = null, hist = [], lastProbe = 0;
 
-  function cinemaCrop() {
+  function ratioCrop(R) {
     const a = video.videoWidth / video.videoHeight;
-    if (!a || a >= 2.3) return { t: 0, b: 0, l: 0, r: 0 };
-    const f = (1 - a / 2.39) / 2;
+    if (!a || a >= R - 0.05) return { t: 0, b: 0, l: 0, r: 0 };
+    const f = (1 - a / R) / 2 + 0.004;
     return { t: f, b: f, l: 0, r: 0 };
+  }
+  function barsLabel() {
+    if (!barsBtn) return;
+    const m = barsMode === "off" ? S[6] : barsMode === "auto" ? S[5] + (readable ? "" : " (" + S[8] + ")") : barsMode + ":1";
+    barsBtn.textContent = S[4] + ": " + m;
   }
   function detectBars() {
     if (!readable) return;
@@ -260,7 +271,7 @@
     if (!probe) { probe = document.createElement("canvas"); probe.width = N; probe.height = N; pctx = probe.getContext("2d", { willReadFrequently: true }); }
     let d;
     try { pctx.drawImage(video, 0, 0, N, N); d = pctx.getImageData(0, 0, N, N).data; }
-    catch (e) { readable = false; return; }   // baska alan adindan gelen video: tarayici okumaya izin vermiyor
+    catch (e) { readable = false; barsLabel(); pokeBar(7000); return; }   // baska alan adindan gelen video: tarayici okumaya izin vermiyor
     // her satir/sutun icin ortalama parlaklik ve "parlak" (l > 40) piksel sayisi
     const rowMean = new Array(N).fill(0), rowBright = new Array(N).fill(0), colBright = new Array(N).fill(0);
     let total = 0;
@@ -295,9 +306,9 @@
   function applyBarsMode() {
     hist = [];
     if (barsMode === "off") setCrop({ t: 0, b: 0, l: 0, r: 0 });
-    else if (barsMode === "cinema") setCrop(cinemaCrop());
-    else { setCrop({ t: 0, b: 0, l: 0, r: 0 }); detectBars(); }
-    if (barsBtn) barsBtn.textContent = S[4] + ": " + (barsMode === "off" ? S[6] : barsMode === "cinema" ? S[7] : S[5]);
+    else if (barsMode === "auto") { setCrop({ t: 0, b: 0, l: 0, r: 0 }); detectBars(); }
+    else setCrop(ratioCrop(parseFloat(barsMode)));
+    barsLabel();
   }
 
   // Bantlarin ustune ayni isigi koyan katmanlar (ust+alt ve sol+sag). Bantin oldugu yerde video ustunde gorunur.
@@ -350,7 +361,7 @@
     bar.className = "bar";
     barsBtn = document.createElement("button");
     barsBtn.addEventListener("click", () => {
-      barsMode = barsMode === "auto" ? "cinema" : barsMode === "cinema" ? "off" : "auto";
+      barsMode = MODES[(MODES.indexOf(barsMode) + 1) % MODES.length];
       store.set("bars", barsMode);
       applyBarsMode();
       pokeBar();
@@ -432,11 +443,11 @@
     else loopId = setTimeout(tick, video.paused ? 250 : 33);
   }
 
-  function pokeBar() {
+  function pokeBar(ms) {
     if (!bar) return;
     bar.classList.remove("hidden");
     clearTimeout(barTimer);
-    barTimer = setTimeout(() => bar && bar.classList.add("hidden"), HIDE_MS);
+    barTimer = setTimeout(() => bar && bar.classList.add("hidden"), typeof ms === "number" ? ms : HIDE_MS);
   }
   function onKey(e) { if (e.key === "Escape") exit(); }
   function onFs() {
