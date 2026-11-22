@@ -63,6 +63,16 @@ Requires Windows 10 (2004+) or Windows 11, 64-bit.
 
 **The sides stay black.** Some games block screen capture; then the light can't be created.
 
+## iPad and other browsers: Ambiance Video
+
+**Ambiance Video** brings the same idea to videos in Safari on iPad (and any browser with a userscript manager): tap a video, press **Ambiance**, and it goes fullscreen with the black bars glowing in sync with the scene. Works on YouTube and most other sites. DRM-protected services (Netflix, Disney+ etc.) block it.
+
+1. Install the free **[Userscripts](https://apps.apple.com/app/userscripts/id1463298887)** app from the App Store, open it once and pick a folder for scripts.
+2. In **Settings → Apps → Safari → Extensions → Userscripts**, turn it on and allow it on all websites.
+3. In Safari, open **[ambiance-video.user.js](https://aahmetcaglarr.github.io/AmbianceUltrawide/ambiance-video.user.js)**, tap the Userscripts icon in the address bar and choose **Install**.
+
+On desktop, the same file works with Tampermonkey or Violentmonkey.
+
 ## Privacy
 
 Ambiance Ultrawide collects no data and makes no network connections. Details: [PRIVACY.md](PRIVACY.md)
@@ -98,5 +108,7 @@ powershell -ExecutionPolicy Bypass -File src\package.ps1    # MSIX + zip
 
 **Kurulum:** [Microsoft Store](https://apps.microsoft.com/detail/9N5WW64LNMSH?hl=tr-tr)'dan yükle ([Türkçe tanıtım sayfası](https://aahmetcaglarr.github.io/AmbianceUltrawide/tr/)) ya da [Releases](../../releases) sayfasından zip'i indir.
 **Kullanım:** Oyunu pencereli ya da kenarlıksız modda aç, Ambiance Ultrawide'da listeden seç ve **Başlat**'a bas. Ya da oyundayken **Ctrl+Alt+A**'ya bas. **Ctrl+Alt+Z** büyütmeyi açıp kapatır.
+
+**iPad:** Safari'deki videolar için **Ambiance Video** betiği var: yukarıdaki "iPad and other browsers" bölümündeki üç adımla kurulur. YouTube ve çoğu sitede çalışır; Netflix gibi DRM'li servisler izin vermez.
 
 Ambiance Ultrawide hiçbir veri toplamaz ve internete bağlanmaz ([PRIVACY.md](PRIVACY.md)). [MIT](LICENSE) lisanslıdır.
