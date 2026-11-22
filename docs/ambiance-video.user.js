@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Ambiance Video
 // @namespace    https://aahmetcaglarr.github.io/AmbianceUltrawide/
-// @version      1.0.0
+// @version      1.1.0
 // @description  Fullscreen videos on any site with ambient light synced to the scene, instead of black bars. Made for iPad Safari.
 // @author       CaglarSoft
 // @homepageURL  https://github.com/aahmetcaglarr/AmbianceUltrawide
@@ -111,8 +111,22 @@
     const r = v.getBoundingClientRect();
     return r.width >= MIN_W && r.height >= MIN_H && r.bottom > 0 && r.top < innerHeight;
   }
+  // Oynaticilarin "shadow DOM" icine sakladigi videolari ve cerceveleri de bul (sik cagrildigi icin kisa sureli onbellek)
+  let deepCache = { t: 0, videos: [], frames: [] };
+  function deep() {
+    const now = Date.now();
+    if (now - deepCache.t < 700) return deepCache;
+    const videos = [], frames = [];
+    (function walk(r) {
+      r.querySelectorAll("video").forEach((v) => videos.push(v));
+      r.querySelectorAll("iframe, frame").forEach((f) => frames.push(f));
+      r.querySelectorAll("*").forEach((el) => { if (el.shadowRoot && el !== host) walk(el.shadowRoot); });
+    })(document);
+    deepCache = { t: now, videos, frames };
+    return deepCache;
+  }
   function videoAt(x, y) {
-    for (const v of document.querySelectorAll("video")) {
+    for (const v of deep().videos) {
       const r = v.getBoundingClientRect();
       if (x >= r.left && x <= r.right && y >= r.top && y <= r.bottom && bigEnough(v)) return v;
     }
@@ -140,8 +154,54 @@
   document.addEventListener("play", (e) => { if (e.target instanceof HTMLVideoElement && bigEnough(e.target)) showBtn(e.target); }, true);
   btn.addEventListener("click", (e) => { e.preventDefault(); e.stopPropagation(); if (target) enter(target); });
 
+  // ---------- cerceve koprusu ----------
+  // Film sitelerinde oynatici genelde baska bir saglayicinin iframe'inin icindedir ve iframe'e tam ekran izni verilmez.
+  // O zaman icerideki betik dis sayfadaki betige haber verir; dis sayfa o iframe'i ekrani kaplayacak hale getirir.
+  // Ic ice iframe'lerde haber en ust sayfaya kadar zincirle iletilir.
+  const inFrame = window.top !== window;
+  const MSG = "ambiance-video";
+  const lifted = new Map();   // buyutulen iframe -> eski hali
+  const LIFT = "position:fixed!important;inset:0!important;width:100vw!important;height:100vh!important;max-width:none!important;" +
+    "max-height:none!important;margin:0!important;padding:0!important;border:0!important;transform:none!important;" +
+    "z-index:2147483647!important;display:block!important;visibility:visible!important;opacity:1!important";
+
+  function tell(cmd) { try { window.parent.postMessage({ [MSG]: cmd }, "*"); } catch (e) { /* ust sayfa yok */ } }
+  function frameOf(win) { return deep().frames.find((f) => { try { return f.contentWindow === win; } catch (e) { return false; } }); }
+
+  function lift(f) {
+    if (lifted.has(f)) return;
+    lifted.set(f, { style: f.getAttribute("style"), overflow: document.documentElement.style.overflow });
+    f.style.cssText = LIFT;
+    document.documentElement.style.overflow = "hidden";
+    if (inFrame) tell("enter");
+    else {
+      const req = f.requestFullscreen || f.webkitRequestFullscreen;
+      if (req) { try { const p = req.call(f); if (p && p.catch) p.catch(() => {}); } catch (e) { /* sayfayi kaplamasi yeterli */ } }
+    }
+  }
+  function drop(f) {
+    const s = lifted.get(f);
+    if (!s) return;
+    lifted.delete(f);
+    if (s.style === null) f.removeAttribute("style"); else f.setAttribute("style", s.style);
+    document.documentElement.style.overflow = s.overflow;
+    if (inFrame) tell("exit");
+    else if ((document.fullscreenElement || document.webkitFullscreenElement) === f) {
+      const x = document.exitFullscreen || document.webkitExitFullscreen;
+      try { const p = x.call(document); if (p && p.catch) p.catch(() => {}); } catch (e) { /* zaten cikti */ }
+    }
+  }
+  window.addEventListener("message", (e) => {
+    const cmd = e.data && typeof e.data === "object" ? e.data[MSG] : null;
+    if (cmd !== "enter" && cmd !== "exit") return;
+    deepCache.t = 0;
+    const f = frameOf(e.source);   // sadece bu sayfadaki bir iframe'den gelen mesajlar
+    if (!f) return;
+    if (cmd === "enter") lift(f); else drop(f);
+  });
+
   // ---------- ambiyans tam ekran ----------
-  let stage = null, video = null, marker = null, saved = null, canvas = null, ctx = null, bar = null, loopId = 0, barTimer = 0, styleGuard = null;
+  let stage = null, video = null, marker = null, saved = null, canvas = null, ctx = null, bar = null, loopId = 0, barTimer = 0, styleGuard = null, askedParent = false;
   const FILL = "position:absolute!important;inset:0!important;width:100%!important;height:100%!important;" +
     "max-width:none!important;max-height:none!important;object-fit:contain!important;transform:none!important;" +
     "margin:0!important;z-index:2!important;background:transparent!important;display:block!important;opacity:1!important;visibility:visible!important";
@@ -201,8 +261,12 @@
     document.addEventListener("keydown", onKey, true);
     pokeBar();
 
+    // Gercek tam ekran dene; iframe'e izin verilmemisse (ya da reddedilirse) dis sayfadan bu cerceveyi buyutmesini iste
+    const canFs = document.fullscreenEnabled || document.webkitFullscreenEnabled;
     const req = stage.requestFullscreen || stage.webkitRequestFullscreen;
-    if (req) { try { const p = req.call(stage); if (p && p.catch) p.catch(() => {}); } catch (e) { /* tam ekran yoksa sayfayi kaplar */ } }
+    const askParent = () => { if (inFrame && stage && !askedParent) { askedParent = true; tell("enter"); } };
+    if (req && canFs) { try { const p = req.call(stage); if (p && p.catch) p.catch(askParent); } catch (e) { askParent(); } }
+    else askParent();
     document.addEventListener("fullscreenchange", onFs);
     document.addEventListener("webkitfullscreenchange", onFs);
     if (v.paused) { const p = v.play(); if (p && p.catch) p.catch(() => {}); }
@@ -251,6 +315,7 @@
     v.controls = saved.controls;
     v.playsInline = saved.playsinline;
     document.documentElement.style.overflow = saved.overflow;
+    if (askedParent) { askedParent = false; tell("exit"); }
     s.remove();
     video = marker = canvas = ctx = bar = null;
     // tam ekrandan cikista bazi oynaticilar duraklatir; oynuyorsa devam etsin
